@@ -14,7 +14,7 @@ window.VY_CONFIG = {
 
   /** Central customer support line (click-to-call and the fallback for any showroom without its own number). Digits only, with country code. */
   hotline: "919961774455",
-  hotlineDisplay: "+91 99617 74455",
+  hotlineDisplay: "xxxxxxxx",
 
   /** The 24/7 WhatsApp bot behind the floating chat button. Kept separate from showroom numbers so adding a branch line never reroutes bot chats. */
   botWhatsapp: "919961774455",
