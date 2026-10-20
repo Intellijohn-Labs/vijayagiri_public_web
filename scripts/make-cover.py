@@ -8,7 +8,8 @@ Real fabric thrown over a bike behaves in a few simple ways, and this models the
   * the hem pools on the floor.
 
 Run from the repo root after changing public/images/bikes/r15m.png:  python3 scripts/make-cover.py
-Needs: pip install numpy scipy pillow.  Then update BIKE_PHOTOS.r15.cover (width / height / pad) in src/lib/data.ts if they changed.
+Needs: pip install numpy scipy pillow.  The output file name includes a hash of its contents and src/lib/data.ts is updated to match, so browsers and
+Next's image cache can never keep serving an older cover from the same URL.
 """
 from pathlib import Path
 
@@ -18,7 +19,8 @@ from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "public/images/bikes/r15m.png"
-OUT = ROOT / "public/images/bikes/r15m-cover.webp"
+OUT_DIR = ROOT / "public/images/bikes"
+DATA = ROOT / "src/lib/data.ts"
 P = 48                                      # the cover is a little bigger than the photo (hem pools past the tyres)
 rng = np.random.default_rng(7)
 
@@ -105,8 +107,21 @@ col += ndi.gaussian_filter(rng.standard_normal((h, w)).astype(np.float32), 0.6)[
 
 out = np.dstack([np.clip(col, 0, 255), alpha * 255]).astype(np.uint8)
 im = Image.fromarray(out, "RGBA")
-im.save(OUT, "WEBP", quality=86, alpha_quality=100, method=6)
-print("cover", im.size, "pad", P, "bike", (W, H), "bytes", OUT.stat().st_size)
+import hashlib, io, re
+buf = io.BytesIO()
+im.save(buf, "WEBP", quality=86, alpha_quality=100, method=6)
+digest = hashlib.md5(buf.getvalue()).hexdigest()[:8]
+name = f"r15m-cover.{digest}.webp"
+for old in OUT_DIR.glob("r15m-cover*.webp"):          # drop previous covers so an old URL cannot resolve
+    old.unlink()
+(OUT_DIR / name).write_bytes(buf.getvalue())
+OUT = OUT_DIR / name
+text = DATA.read_text()
+text, n = re.subn(r'cover: \{ src: "[^"]*", width: \d+, height: \d+, pad: \d+ \}', f'cover: {{ src: "/images/bikes/{name}", width: {im.width}, height: {im.height}, pad: {P} }}', text)
+if n != 1:
+    raise SystemExit("could not find BIKE_PHOTOS.r15.cover in src/lib/data.ts: update it by hand")
+DATA.write_text(text)
+print("cover", im.size, "pad", P, "bike", (W, H), "->", OUT.name, f"({OUT.stat().st_size} bytes); data.ts updated")
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1:                    # optional: python3 scripts/make-cover.py preview.png  -> bike / covered / cloth only
