@@ -106,7 +106,7 @@ export function Turntable({ kind, body, accent, glow, photo }: TurntableProps) {
       >
         <motion.div className="absolute inset-0 [transform-style:preserve-3d]" style={{ rotateY: angle }}>
           {photo ? (
-            <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} sizes="(min-width: 1024px) 45vw, 90vw" draggable={false} className="pointer-events-none block size-full select-none object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.55)]" />
+            <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} sizes="(min-width: 1024px) 45vw, 90vw" loading="eager" draggable={false} className="pointer-events-none block size-full select-none object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.55)]" />
           ) : (
             LAYERS.map((z, i) => (
               <div key={z} className="absolute inset-0" style={{ transform: `translateZ(${z}px)`, filter: i < LAYERS.length - 1 ? `brightness(${0.32 + i * 0.05})` : undefined }}>
