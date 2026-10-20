@@ -173,8 +173,8 @@ export function Hero() {
             {/* the edge strokes are masked to the cloth's own outline, so they never float in empty space */}
             <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 size-full" style={{ WebkitMaskImage: `url(${cover.src})`, maskImage: `url(${cover.src})`, WebkitMaskSize: "100% 100%", maskSize: "100% 100%" }}>
               <path data-edge-shadow transform="translate(1.4 0)" fill="none" stroke="rgba(0,0,0,0.55)" strokeWidth="22" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(9px)" }} />
-              <path data-edge-glow fill="none" stroke="rgba(110,150,255,0.28)" strokeWidth="7" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(3px)" }} />
-              <path data-edge-lip fill="none" stroke="rgba(205,222,255,0.7)" strokeWidth="1.6" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(0.6px)" }} />
+              <path data-edge-glow fill="none" stroke="rgba(235,240,255,0.22)" strokeWidth="7" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(3px)" }} />
+              <path data-edge-lip fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.6" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(0.6px)" }} />
             </svg>
           </div>
         )}
