@@ -99,6 +99,23 @@ export const modelById = (id: string) => MODELS.find((m) => m.id === id);
  * The three flagships on the turntable. Colours come from the catalogue (the brief's "Dark Matte Blue" and "Metallic Grey" are not
  * MT-15 / R15 colours in it, so the nearest catalogue colours are used). Only the R15M has a quick-shifter.
  */
+/**
+ * A real photo (transparent cut-out) for a model. `headlight` is where the lamp sits as fractions of the image, so the hero
+ * beam and glow stay locked to it if the file is replaced. Photos are only offered in the colour they show.
+ */
+export interface BikePhoto {
+  src: string;
+  width: number;
+  height: number;
+  colour: string;
+  alt: string;
+  headlight: { x: number; y: number };
+}
+/** NOTE: the supplied r15m.png shows a bike with an "R9" side decal. Confirm it is the model you want on the R15M page. */
+export const BIKE_PHOTOS: Record<string, BikePhoto> = {
+  r15: { src: "/images/bikes/r15m.png", width: 514, height: 384, colour: "Racing Blue", alt: "Blue Yamaha supersport motorcycle, three-quarter front view", headlight: { x: 0.288, y: 0.151 } },
+};
+
 export interface Flagship {
   modelId: string;
   kind: BikeKind;
@@ -106,9 +123,11 @@ export interface Flagship {
   outline: string;
   colours: string[];
   quickshifter: boolean;
+  /** When set, the photo replaces the illustration for this model. */
+  photo?: BikePhoto;
 }
 export const FLAGSHIPS: Flagship[] = [
-  { modelId: "r15", kind: "r15", label: "Yamaha R15M", outline: "R 15 M", colours: ["Racing Blue", "Metallic Silver"], quickshifter: true },
+  { modelId: "r15", kind: "r15", label: "Yamaha R15M", outline: "R 15 M", colours: ["Racing Blue", "Metallic Silver"], quickshifter: true, photo: BIKE_PHOTOS.r15 },
   { modelId: "mt15-v2", kind: "mt15", label: "Yamaha MT-15 V2", outline: "M T - 15", colours: ["Cyan Storm", "Racing Blue"], quickshifter: false },
   { modelId: "aerox-155", kind: "aerox", label: "Yamaha Aerox 155", outline: "A E R O X", colours: ["Racing Blue", "Metallic Black"], quickshifter: false },
 ];

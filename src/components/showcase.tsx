@@ -84,7 +84,9 @@ export function Showcase() {
 
   const f = FLAGSHIPS[index];
   const m = modelById(f.modelId)!;
-  const colour = f.colours[colourIdx[index]];
+  // a photo only shows one colour, so that is the only colour offered for that model
+  const colours = f.photo ? [f.photo.colour] : f.colours;
+  const colour = colours[Math.min(colourIdx[index], colours.length - 1)];
   const body = COLOUR_HEX[colour];
   const accent = f.kind === "mt15" ? "#0b2a3a" : "#ffffff";
   const rpm = m.specs.power.split("@")[1]?.trim();
@@ -138,14 +140,15 @@ export function Showcase() {
 
             <div className="mt-3 flex flex-wrap items-center gap-2 sm:mt-4">
               <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Colour</span>
-              {f.colours.map((c, ci) => (
+              {colours.map((c, ci) => (
                 <button
                   key={c}
+                  disabled={colours.length === 1}
                   type="button"
                   aria-label={c}
-                  aria-pressed={ci === colourIdx[index]}
+                  aria-pressed={ci === Math.min(colourIdx[index], colours.length - 1)}
                   onClick={() => setColourIdx((prev) => prev.map((v, i) => (i === index ? ci : v)))}
-                  className={`size-7 rounded-full border-2 transition-transform hover:scale-110 active:scale-90 ${ci === colourIdx[index] ? "border-white shadow-[0_0_0_3px_rgba(47,107,255,0.6)]" : "border-white/25"}`}
+                  className={`size-7 rounded-full border-2 transition-transform enabled:hover:scale-110 enabled:active:scale-90 ${ci === Math.min(colourIdx[index], colours.length - 1) ? "border-white shadow-[0_0_0_3px_rgba(47,107,255,0.6)]" : "border-white/25"}`}
                   style={{ background: COLOUR_HEX[c] }}
                 />
               ))}
@@ -180,11 +183,11 @@ export function Showcase() {
               <Mist trigger={index} />
               <AnimatePresence mode="wait">
                 <motion.div key={`${f.kind}-${colour}`} initial={{ opacity: 0, x: 60, filter: "blur(16px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -60, filter: "blur(16px)" }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}>
-                  <Turntable kind={f.kind} body={body} accent={accent} glow="rgba(60,110,255,0.55)" />
+                  <Turntable kind={f.kind} body={body} accent={accent} glow="rgba(60,110,255,0.55)" photo={f.photo} />
                 </motion.div>
               </AnimatePresence>
             </div>
-            <p className="mt-2 text-center text-[11px] uppercase tracking-[0.25em] text-slate-500">Drag to turn · illustration</p>
+            <p className="mt-2 text-center text-[11px] uppercase tracking-[0.25em] text-slate-500">{f.photo ? "Drag to tilt" : "Drag to turn · illustration"}</p>
 
             <div role="tablist" aria-label="Choose a model" className="mt-3 flex items-center gap-1 rounded-full border border-white/10 bg-black/30 p-1 backdrop-blur">
               {FLAGSHIPS.map((x, i) => (

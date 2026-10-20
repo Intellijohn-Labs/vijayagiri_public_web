@@ -53,7 +53,7 @@ export function Footer() {
         <p>
           © {year ?? ""} {SITE.legalName} All rights reserved.
         </p>
-        <p>Yamaha and its logos are trademarks of Yamaha Motor Co., Ltd. Vijayagiri Auto Agencies is an authorized dealer. Riding illustrations are artwork, not photographs of stock.</p>
+        <p>Yamaha and its logos are trademarks of Yamaha Motor Co., Ltd. Vijayagiri Auto Agencies is an authorized dealer. Imagery is illustrative: actual models, colours and specifications may vary.</p>
         <a href={SITE.loginUrl} className="w-fit text-slate-600 transition-colors hover:text-slate-300">
           Staff Login
         </a>

@@ -1,14 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronsDown } from "lucide-react";
-import { BikeSvg } from "./bike-art";
+import { BIKE_PHOTOS } from "@/lib/data";
 import { useGear } from "./gear-context";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const photo = BIKE_PHOTOS.r15;
 const DRAPE_FULL = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
 /** the cloth ends up bunched in the top-left corner */
 const DRAPE_PULLED = "polygon(0% 0%, 24% 0%, 9% 24%, 0% 42%)";
@@ -68,19 +70,20 @@ export function Hero() {
     <section id="top" ref={root} aria-labelledby="hero-title" className="relative isolate h-svh min-h-[560px] overflow-hidden bg-ink">
       {/* atmosphere: floor, spotlight, vignette */}
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(120%_80%_at_70%_100%,#0d1a44_0%,#070b16_55%,#04060c_100%)]" />
-      <div aria-hidden data-glow className="absolute -ml-[40vmax] -mt-[40vmax] left-[58%] top-[44%] size-[80vmax] rounded-full bg-[radial-gradient(circle,rgba(70,125,255,0.55)_0%,rgba(40,80,200,0.18)_35%,transparent_62%)] [--g:0.3] [--go:0.1] [opacity:var(--go)] [scale:var(--g)] motion-reduce:[--g:1.6] motion-reduce:[--go:0.9]" />
+      <div aria-hidden data-glow className="absolute -ml-[40vmax] -mt-[40vmax] left-[52%] top-[52%] size-[80vmax] rounded-full bg-[radial-gradient(circle,rgba(70,125,255,0.55)_0%,rgba(40,80,200,0.18)_35%,transparent_62%)] [--g:0.3] [--go:0.1] [opacity:var(--go)] [scale:var(--g)] motion-reduce:[--g:1.6] motion-reduce:[--go:0.9]" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-[34svh] bg-[linear-gradient(to_top,rgba(4,6,12,0.95),transparent)]" />
 
-      {/* the bike */}
-      <div className="absolute bottom-[22svh] right-[-3vw] w-[106vw] sm:bottom-[8svh] sm:right-[-2vw] sm:w-[min(96vw,920px,98svh)] lg:bottom-[7svh] lg:right-[10vw] lg:w-[min(72vw,1100px,98svh)]">
-        <div data-bike className="relative origin-[70%_80%] [--b:0.22] [--bs:1.07] [filter:brightness(var(--b))] [scale:var(--bs)] motion-reduce:[--b:1] motion-reduce:[--bs:1]">
-          <BikeSvg kind="r15" body="#1f4fa3" accent="#ffffff" uid="hero" className="relative block h-auto w-full" />
-          {/* headlight lamp glow + beam share the headlight's position in the artwork (x 90.6%, y 35%) */}
-          <div data-lamp className="pointer-events-none absolute -ml-8 -mt-8 left-[90.6%] top-[35%] size-16 rounded-full bg-[radial-gradient(circle,rgba(220,238,255,0.95),rgba(120,170,255,0.4)_40%,transparent_70%)] blur-[2px] [--lamp:0] [opacity:var(--lamp)] motion-reduce:[--lamp:1]" />
+      {/* the bike: a real cut-out photo (it faces left, so the beam travels left from its headlight) */}
+      <div className="absolute bottom-[18svh] right-[2vw] w-[96vw] sm:bottom-[8svh] sm:w-[min(80vw,760px,76svh)] lg:bottom-[6svh] lg:right-[9vw] lg:w-[min(58vw,880px,78svh)]" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
+        <div aria-hidden className="absolute inset-x-[6%] -bottom-[1%] h-[7%] rounded-full bg-black/70 blur-xl" />
+        <div data-bike className="relative size-full origin-[35%_85%] [--b:0.22] [--bs:1.07] [filter:brightness(var(--b))] [scale:var(--bs)] motion-reduce:[--b:1] motion-reduce:[--bs:1]">
+          <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} priority sizes="(min-width: 1024px) 58vw, 96vw" draggable={false} className="block h-auto w-full select-none" />
+          {/* lamp bloom + beam are placed from the headlight's position in the photo */}
+          <div data-lamp className="pointer-events-none absolute -ml-9 -mt-9 size-[4.5rem] rounded-full bg-[radial-gradient(circle,rgba(225,240,255,0.95),rgba(120,170,255,0.4)_40%,transparent_70%)] blur-[2px] [--lamp:0] [opacity:var(--lamp)] motion-reduce:[--lamp:1]" style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%` }} />
           <div
             data-beam
-            className="pointer-events-none absolute left-[90.6%] top-[35%] -mt-[22%] h-[78%] w-[95%] origin-left bg-[linear-gradient(to_right,rgba(214,232,255,0.7),rgba(150,190,255,0.22)_45%,transparent)] mix-blend-screen [--beam:0] [--beam-o:0] [opacity:var(--beam-o)] [scale:var(--beam)_1] motion-reduce:[--beam:1] motion-reduce:[--beam-o:1]"
-            style={{ clipPath: "polygon(0% 47%, 100% 0%, 100% 100%, 0% 53%)", filter: "blur(2px)" }}
+            className="pointer-events-none absolute h-[78%] w-[125%] -translate-x-full -translate-y-1/2 origin-right bg-[linear-gradient(to_left,rgba(214,232,255,0.7),rgba(150,190,255,0.22)_45%,transparent)] mix-blend-screen [--beam:0] [--beam-o:0] [opacity:var(--beam-o)] [scale:var(--beam)_1] motion-reduce:[--beam:1] motion-reduce:[--beam-o:1]"
+            style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%`, clipPath: "polygon(100% 47%, 0% 0%, 0% 100%, 100% 53%)", filter: "blur(2px)" }}
           />
         </div>
       </div>
