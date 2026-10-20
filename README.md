@@ -1,20 +1,51 @@
 # Vijayagiri Auto Agencies – public website
 
-Static, dependency-free customer site (HTML/CSS/JS). No build step, no login, no backend.
+A cinematic, scroll-driven showcase for the Vijayagiri Yamaha dealer network (6 showrooms across Ernakulam).
+Next.js App Router · TypeScript · Tailwind CSS v4 · GSAP ScrollTrigger · Framer Motion · Lenis · lucide-react.
 
-    python3 -m http.server 8000     # then open http://localhost:8000
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run build && npm start
+npm run lint && npm run typecheck
+```
 
-Deploy by uploading the folder to any static host (Vercel, Netlify, S3, nginx).
+## The story
 
-## Editing content – everything is in `js/data.js`
+The page is told as a gear change. A fixed dial on the right shifts as you scroll, and each chapter is a section:
 
-| What | Where |
-| --- | --- |
-| Hotline, support email, working days, "Employee / Ops Login" URL | `VY_CONFIG` |
-| Showroom phone / WhatsApp / hours / days | `VY_BRANCHES` (a `null` number falls back to the central hotline and the card says so) |
-| Specs, colours, tagline | `VY_MODELS` |
-| Studio photos | `photos: { "Racing Blue": "images/bikes/r15-racing-blue.webp", "*": "images/bikes/r15.webp" }` – until a photo exists, a colour-tinted illustration is shown |
-| Brochure PDF | `brochure: "brochures/r15.pdf"` – the button only appears when set |
-| "Available at Showroom" badge | `inShowroom: ["hq", "perumbavoor"]` – all other branches show "Fast Yard Delivery" |
+| Gear | Chapter | Section |
+| --- | --- | --- |
+| N | The Silence Before | Hero: a pinned, scroll-scrubbed drape reveal of the R15M (`hero.tsx`) |
+| 1 | Wake the Machine | The headlight, beam and glow come on at the end of the unveil |
+| 2 | Carve the Apex | Flagship turntable: R15M / MT-15 / Aerox (`showcase.tsx`) |
+| 3 | Pure Acceleration | Whole range ranked by power, torque or mileage (`range.tsx`) |
+| 4 | Open Roads | Kerala riding routes (`routes-section.tsx`) |
+| 5 | Racing DNA | Riding gear (`gear-section.tsx`) |
+| 6 | The Summit | Test-ride booking, showrooms, footer (`booking.tsx`, `showrooms.tsx`) |
 
-Open/Closed badges use the `timeZone` in `VY_CONFIG` (Asia/Kolkata), not the visitor's clock.
+Smooth scrolling is Lenis, driven by GSAP's ticker so ScrollTrigger stays in sync (`smooth-scroll.tsx`).
+Gear changes come from `useGearSection` (`gear-context.tsx`).
+
+## Editing content
+
+Everything editable is in [`src/lib/data.ts`](src/lib/data.ts): contact numbers, showrooms and their hours, models and specs,
+the three flagship turntable entries, routes and riding gear.
+
+- A showroom with `phone: null` falls back to the central hotline, and its card says so.
+- `SITE.hotlineDisplay` is the text shown for the hotline; the dial and WhatsApp links use `SITE.hotline`.
+- `SITE.botWhatsapp` is the number behind the floating chat button (the 24/7 WhatsApp bot).
+- Prices and specs are indicative figures from the dealership's internal catalogue. Check them, or set `SITE.showPrices` to `false`.
+- Route copy is deliberately general. Have someone who rides each road review it.
+
+## Things to know
+
+- **Artwork, not photos.** There are no studio photos or 3D models yet, so the bikes are vector illustrations
+  (`bike-art.tsx`). The turntable stacks flat layers in CSS 3D, which is convincing from the side but not a real 360°.
+  Replace the artwork with transparent PNG cut-outs or a frame sequence when you have them.
+- **Booking has no backend.** Submitting the test-ride form opens a pre-filled WhatsApp message to the chosen showroom; the
+  slot is only confirmed when the showroom replies. Nothing is stored. Wire up an API route here if you want real bookings.
+- **Reduced motion.** With `prefers-reduced-motion`, there is no pinning, no smooth-scroll takeover and no scrubbed animation:
+  visitors see the finished scene and the model tabs switch directly.
+- **Cache Components is on** (see `next.config.ts`). Anything time- or random-dependent lives in effects or handlers, never in render.
+- Dark theme only. Open / closed badges and the booking calendar use `SITE.timeZone` (Asia/Kolkata), not the visitor's clock.

@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #04060c;
+  --color-night: #070b16;
+  --color-navy: #0a1128;
+  --color-panel: #0d1530;
+  --color-line: rgba(255, 255, 255, 0.1);
+  --color-race: #2f6bff;
+  --color-race-soft: #8fb0ff;
+  --color-ember: #ff2d46;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow), "Arial Narrow", Impact, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-ink);
+}
+
+body {
+  background: var(--color-ink);
+  color: #dbe3f7;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Lenis (smooth scroll) recommended base styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+::selection {
+  background: var(--color-race);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-race-soft);
+  outline-offset: 3px;
+}
+
+/* big editorial type */
+.font-display {
+  font-family: var(--font-display);
+}
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.14);
+}
+.text-outline-strong {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.9);
+}
+
+/* soft glass panels */
+.glass {
+  background: rgba(13, 21, 48, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+/* turntable rings spin in the platform's plane */
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ring-spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes ping-slow {
+  0% { transform: scale(1); opacity: 0.5; }
+  30%, 100% { transform: scale(1.75); opacity: 0; }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.75); }
+}
+
+/* hide the sticky/pinned scroll effects for visitors who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
