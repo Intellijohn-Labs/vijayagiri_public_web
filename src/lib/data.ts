@@ -107,11 +107,13 @@ export interface BikePhoto {
   alt: string;
   facing: "left" | "right";
   headlight: { x: number; y: number };
+  /** A cloth cover shaped to this bike (see the hero). `pad` is how far it extends past the photo on each side, in photo pixels. */
+  cover?: { src: string; width: number; height: number; pad: number };
 }
 export const BIKE_PHOTOS: Record<string, BikePhoto> = {
   aerox: { src: "/images/bikes/aerox.png", width: 640, height: 524, colour: "Metallic Black", alt: "Yamaha Aerox 155 in Metallic Black, three-quarter front view", facing: "right", headlight: { x: 0.789, y: 0.41 } },
   mt15: { src: "/images/bikes/mt15.png", width: 878, height: 751, colour: "Cyan Storm", alt: "Yamaha MT-15 in Cyan Storm, three-quarter front view", facing: "right", headlight: { x: 0.74, y: 0.331 } },
-  r15: { src: "/images/bikes/r15m.png", width: 1064, height: 685, colour: "Metallic Silver", alt: "Yamaha R15M in Metallic Silver, side view", facing: "right", headlight: { x: 0.895, y: 0.31 } },
+  r15: { src: "/images/bikes/r15m.png", width: 1064, height: 685, colour: "Metallic Silver", alt: "Yamaha R15M in Metallic Silver, side view", facing: "right", headlight: { x: 0.895, y: 0.31 }, cover: { src: "/images/bikes/r15m-cover.webp", width: 1160, height: 781, pad: 48 } },
 };
 
 export interface Flagship {

@@ -11,14 +11,50 @@ import { useGear } from "./gear-context";
 gsap.registerPlugin(ScrollTrigger);
 
 const photo = BIKE_PHOTOS.r15;
+const cover = photo.cover;
 const facingLeft = photo.facing === "left";
-const DRAPE_FULL = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
-/** the cloth ends up bunched in the top-left corner */
-const DRAPE_PULLED = "polygon(0% 0%, 24% 0%, 9% 24%, 0% 42%)";
+
+/* ── the cloth ─────────────────────────────────────────────────────────────────────────────────────────────────────
+   The cover image is built from the bike's own silhouette, so it traces the screen, tank, tail and wheels. It is
+   peeled with a clip edge that runs diagonally from the front wheel up and back toward the tail and ripples like a
+   whipped sheet. Coordinates below are percentages of the (padded) cloth box. */
+const EDGE_POINTS = 28;
+const EDGE_TILT = 34; // how far the top of the edge trails the bottom: the nose and front wheel are freed first
+
+/** x of the leading edge at height y (0 = top, 1 = bottom) once the cloth is p (0..1) of the way off. */
+function edgeX(y: number, p: number) {
+  const base = 118 - p * 140;
+  const slant = (0.5 - y) * EDGE_TILT;
+  const amp = 3.4 * Math.pow(Math.sin(Math.PI * Math.min(1, Math.max(0, p))), 0.6); // ripples build up, then settle as it clears
+  const wave = amp * (Math.sin(y * 9 + p * 16) + 0.55 * Math.sin(y * 21 - p * 11));
+  return base + slant + wave;
+}
+
+interface ClothParts {
+  clip: HTMLElement;
+  sway: HTMLElement;
+  shadow: SVGPathElement;
+  glow: SVGPathElement;
+  lip: SVGPathElement;
+}
+
+function drawCloth(p: number, c: ClothParts) {
+  const pts: [number, number][] = [];
+  for (let i = 0; i <= EDGE_POINTS; i++) {
+    const y = i / EDGE_POINTS;
+    pts.push([edgeX(y, p), y * 100]);
+  }
+  c.clip.style.clipPath = `polygon(0% 0%, ${pts.map(([x, y]) => `${x.toFixed(2)}% ${y.toFixed(2)}%`).join(", ")}, 0% 100%)`;
+  const d = pts.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(2)} ${y.toFixed(2)}`).join(" ");
+  c.shadow.setAttribute("d", d);
+  c.glow.setAttribute("d", d);
+  c.lip.setAttribute("d", d);
+  c.sway.style.transform = `translateX(${(-p * 3.5).toFixed(2)}%)`; // the cloth drags back as it is pulled
+}
 
 /**
- * Pinned hero. While pinned, scroll drives one scrubbed timeline:
- * the drape is pulled off the R15M, the headlight wakes up, the beam and glow spread, and the type shifts.
+ * Pinned hero. While pinned, scroll drives one scrubbed timeline: the cloth is whipped off the R15M from the front wheel
+ * back to the tail, then the headlight beam fires, a specular sheen sweeps the bodywork and the type shifts.
  * Visitors who prefer reduced motion see the finished, uncovered scene.
  */
 export function Hero() {
@@ -32,8 +68,16 @@ export function Hero() {
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const q = gsap.utils.selector(el);
-      gsap.set(q("[data-drape]"), { clipPath: DRAPE_FULL });
       gsap.set(q("[data-lead]"), { y: 16 });
+
+      const clip = el.querySelector<HTMLElement>("[data-cloth-clip]");
+      const sway = el.querySelector<HTMLElement>("[data-cloth-sway]");
+      const shadow = el.querySelector<SVGPathElement>("[data-edge-shadow]");
+      const glow = el.querySelector<SVGPathElement>("[data-edge-glow]");
+      const lip = el.querySelector<SVGPathElement>("[data-edge-lip]");
+      const parts = clip && sway && shadow && glow && lip ? { clip, sway, shadow, glow, lip } : null;
+      const edge = { p: 0 };
+      if (parts) drawCloth(0, parts);
 
       const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -48,15 +92,25 @@ export function Hero() {
         },
       });
       tl.to(q("[data-cue]"), { opacity: 0, y: 16, duration: 0.8 }, 0)
-        .to(q("[data-drape]"), { clipPath: DRAPE_PULLED, duration: 5.2, ease: "power1.inOut" }, 0.3)
-        .to(q("[data-bike]"), { "--b": 1, "--bs": 1, duration: 5, ease: "power1.out" }, 0.8)
+        // the cloth comes off: front wheel first, then up and back to the tail
+        .to(edge, { p: 1, duration: 6.2, ease: "power1.inOut", onUpdate: () => parts && drawCloth(edge.p, parts) }, 0.4)
+        .to(q("[data-bike]"), { "--b": 1, duration: 5.6, ease: "power1.out" }, 1.4)
         .to(q("[data-headline]"), { yPercent: -6, duration: 8 }, 0)
         .to(q("[data-sub]"), { opacity: 1, letterSpacing: "0.42em", duration: 3 }, 3.2)
-        .to(q("[data-glow]"), { "--g": 1.6, "--go": 0.95, duration: 4, ease: "power2.out" }, 4.6)
-        .to(q("[data-lamp]"), { "--lamp": 1, duration: 1.4 }, 5.2)
-        .to(q("[data-beam]"), { "--beam": 1, "--beam-o": 1, duration: 3, ease: "power2.out" }, 5.4)
-        .to(q("[data-headline]"), { opacity: 0, filter: "blur(10px)", duration: 1.6 }, 8.2)
-        .to(q("[data-lead]"), { opacity: 1, y: 0, duration: 1.4 }, 8.4);
+        .to(q("[data-glow]"), { "--g": 1.6, "--go": 0.95, duration: 4, ease: "power2.out" }, 4.4)
+        // hand-off: once the bodywork is clear the lamp wakes, the beam fires and the sheen rolls tail to nose
+        .to(q("[data-lamp]"), { "--lamp": 1, duration: 1.2 }, 4.6)
+        .to(q("[data-beam]"), { "--beam": 1, "--beam-o": 1, duration: 3, ease: "power2.out" }, 4.9)
+        .to(q("[data-sheen]"), { "--sheen": 0, duration: 3.2, ease: "power1.inOut" }, 6.0)
+        .to(q("[data-headline]"), { opacity: 0, filter: "blur(10px)", duration: 1.6 }, 8.4)
+        .to(q("[data-lead]"), { opacity: 1, y: 0, duration: 1.4 }, 8.6);
+
+      return () => {
+        if (parts) {
+          parts.clip.style.clipPath = "";
+          parts.sway.style.transform = "";
+        }
+      };
     });
 
     mm.add("(prefers-reduced-motion: reduce)", () => {
@@ -69,16 +123,31 @@ export function Hero() {
 
   return (
     <section id="top" ref={root} aria-labelledby="hero-title" className="relative isolate h-svh min-h-[560px] overflow-hidden bg-ink">
-      {/* atmosphere: floor, spotlight, vignette */}
+      {/* atmosphere: floor, spotlight */}
       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(120%_80%_at_70%_100%,#0d1a44_0%,#070b16_55%,#04060c_100%)]" />
       <div aria-hidden data-glow className="absolute -ml-[40vmax] -mt-[40vmax] left-[52%] top-[52%] size-[80vmax] rounded-full bg-[radial-gradient(circle,rgba(70,125,255,0.55)_0%,rgba(40,80,200,0.18)_35%,transparent_62%)] [--g:0.3] [--go:0.1] [opacity:var(--go)] [scale:var(--g)] motion-reduce:[--g:1.6] motion-reduce:[--go:0.9]" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-[34svh] bg-[linear-gradient(to_top,rgba(4,6,12,0.95),transparent)]" />
 
-      {/* the bike: a real cut-out photo; the beam travels the way it faces, from its headlight */}
+      {/* the bike: a real cut-out photo, with the cloth over it */}
       <div className="absolute bottom-[18svh] right-[-2vw] w-[104vw] sm:bottom-[8svh] sm:right-[2vw] sm:w-[min(84vw,820px,80svh)] lg:bottom-[6svh] lg:right-[12vw] lg:w-[min(60vw,960px,86svh)]" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
         <div aria-hidden className="absolute inset-x-[6%] -bottom-[1%] h-[6%] rounded-full bg-black/70 blur-xl" />
-        <div data-bike className="relative size-full origin-[50%_85%] [--b:0.22] [--bs:1.07] [filter:brightness(var(--b))] [scale:var(--bs)] motion-reduce:[--b:1] motion-reduce:[--bs:1]">
+        <div data-bike className="relative size-full [--b:0.3] [filter:brightness(var(--b))] motion-reduce:[--b:1]">
           <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} priority sizes="(min-width: 1024px) 60vw, 104vw" draggable={false} className="block h-auto w-full select-none drop-shadow-[0_0_34px_rgba(70,120,255,0.3)]" />
+          {/* specular sheen: a soft glare band that rolls tail to nose, masked to the bike's own silhouette */}
+          <div
+            data-sheen
+            aria-hidden
+            className="pointer-events-none absolute inset-0 mix-blend-overlay [--sheen:100] [background-position:calc(var(--sheen)*1%)_0] motion-reduce:hidden"
+            style={{
+              backgroundImage: "linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.15) 44%, rgba(255,255,255,0.95) 50%, rgba(200,220,255,0.18) 56%, transparent 62%)",
+              backgroundSize: "260% 100%",
+              backgroundRepeat: "no-repeat",
+              WebkitMaskImage: `url(${photo.src})`,
+              maskImage: `url(${photo.src})`,
+              WebkitMaskSize: "100% 100%",
+              maskSize: "100% 100%",
+            }}
+          />
           {/* lamp bloom + beam are placed from the headlight's position in the photo */}
           <div data-lamp className="pointer-events-none absolute -ml-9 -mt-9 size-[4.5rem] rounded-full bg-[radial-gradient(circle,rgba(225,240,255,0.95),rgba(120,170,255,0.4)_40%,transparent_70%)] blur-[2px] [--lamp:0] [opacity:var(--lamp)] motion-reduce:[--lamp:1]" style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%` }} />
           <div
@@ -87,18 +156,32 @@ export function Hero() {
             style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%`, clipPath: facingLeft ? "polygon(100% 47%, 0% 0%, 0% 100%, 100% 53%)" : "polygon(0% 47%, 100% 0%, 100% 100%, 0% 53%)", filter: "blur(2px)" }}
           />
         </div>
+
+        {/* the cloth: shaped to this bike, peeled front-to-tail with a rippling edge, a lit lip and a cast shadow */}
+        {cover && (
+          <div
+            data-cloth
+            aria-hidden
+            className="pointer-events-none absolute z-10 drop-shadow-[0_16px_20px_rgba(0,0,0,0.6)] motion-reduce:hidden"
+            style={{ left: `${(-cover.pad / photo.width) * 100}%`, top: `${(-cover.pad / photo.height) * 100}%`, width: `${((photo.width + 2 * cover.pad) / photo.width) * 100}%`, height: `${((photo.height + 2 * cover.pad) / photo.height) * 100}%` }}
+          >
+            <div data-cloth-clip className="size-full">
+              <div data-cloth-sway className="size-full">
+                <Image src={cover.src} alt="" width={cover.width} height={cover.height} priority sizes="(min-width: 1024px) 66vw, 114vw" draggable={false} className="block size-full select-none" />
+              </div>
+            </div>
+            {/* the edge strokes are masked to the cloth's own outline, so they never float in empty space */}
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 size-full" style={{ WebkitMaskImage: `url(${cover.src})`, maskImage: `url(${cover.src})`, WebkitMaskSize: "100% 100%", maskSize: "100% 100%" }}>
+              <path data-edge-shadow transform="translate(1.4 0)" fill="none" stroke="rgba(0,0,0,0.55)" strokeWidth="22" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(9px)" }} />
+              <path data-edge-glow fill="none" stroke="rgba(110,150,255,0.28)" strokeWidth="7" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(3px)" }} />
+              <path data-edge-lip fill="none" stroke="rgba(205,222,255,0.7)" strokeWidth="1.6" strokeLinejoin="round" vectorEffect="non-scaling-stroke" style={{ filter: "blur(0.6px)" }} />
+            </svg>
+          </div>
+        )}
       </div>
 
       {/* vignette */}
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_62%_58%,transparent_32%,rgba(0,0,0,0.88)_100%)]" />
-
-      {/* the drape */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-20 drop-shadow-[0_30px_50px_rgba(0,0,0,0.65)] motion-reduce:hidden">
-        <div data-drape className="size-full bg-[linear-gradient(115deg,#0b1020_0%,#18204a_36%,#0a0e1d_60%,#1b2450_100%)]">
-          <div className="size-full bg-[repeating-linear-gradient(97deg,rgba(255,255,255,0.06)_0_1px,transparent_1px_46px,rgba(0,0,0,0.42)_46px_54px)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_30%_40%,rgba(120,150,255,0.16),transparent_70%)]" />
-        </div>
-      </div>
 
       {/* type */}
       <div className="relative z-30 mx-auto flex h-full w-full max-w-7xl flex-col justify-start px-5 pt-24 sm:px-8 sm:pt-32 lg:pl-10 lg:pr-44">
@@ -110,7 +193,6 @@ export function Hero() {
           <br />
           <span className="text-outline-strong">the Ascent</span>
         </h1>
-
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 top-[33%] z-30 lg:top-[36%]">

@@ -16,8 +16,8 @@ The page is told as a gear change. A fixed dial on the right shifts as you scrol
 
 | Gear | Chapter | Section |
 | --- | --- | --- |
-| N | The Silence Before | Hero: a pinned, scroll-scrubbed drape reveal of the R15M (`hero.tsx`) |
-| 1 | Wake the Machine | The headlight, beam and glow come on at the end of the unveil |
+| N | The Silence Before | Hero: a pinned, scroll-scrubbed reveal. A satin cover shaped to the R15M is whipped off from the front wheel back to the tail (`hero.tsx`) |
+| 1 | Wake the Machine | As the bodywork clears: the headlight beam fires and a specular sheen rolls tail to nose |
 | 2 | Carve the Apex | Flagship turntable: R15M / MT-15 / Aerox (`showcase.tsx`) |
 | 3 | Pure Acceleration | Whole range ranked by power, torque or mileage (`range.tsx`) |
 | 4 | Open Roads | Kerala riding routes (`routes-section.tsx`) |
@@ -46,6 +46,9 @@ the three flagship turntable entries, routes and riding gear.
   The vector illustrations in `bike-art.tsx` (full CSS-3D turn) remain as the fallback for any model without a photo. A photo can
   only show the colour it was shot in, so that model offers just that colour and tilts a little instead of turning. The cut-out is about 1,060px wide, so it
   is sharp on most screens; use a larger one for big retina displays. Next caches optimised images, so a replaced file can take a while to show.
+- **The hero cloth is generated.** `public/images/bikes/r15m-cover.webp` is built from the photo's own silhouette by
+  `scripts/make-cover.py` (numpy, scipy, Pillow). If you change the R15M photo, rerun it and update `cover` in `BIKE_PHOTOS.r15`.
+  The peel edge, lip and shadow are drawn live in `hero.tsx`.
 - **Booking has no backend.** Submitting the test-ride form opens a pre-filled WhatsApp message to the chosen showroom; the
   slot is only confirmed when the showroom replies. Nothing is stored. Wire up an API route here if you want real bookings.
 - **Reduced motion.** With `prefers-reduced-motion`, there is no pinning, no smooth-scroll takeover and no scrubbed animation:
