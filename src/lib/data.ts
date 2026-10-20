@@ -100,8 +100,9 @@ export const modelById = (id: string) => MODELS.find((m) => m.id === id);
  * MT-15 / R15 colours in it, so the nearest catalogue colours are used). Only the R15M has a quick-shifter.
  */
 /**
- * A real photo (transparent cut-out) for a model. `headlight` is where the lamp sits as fractions of the image, so the hero
- * beam and glow stay locked to it if the file is replaced. Photos are only offered in the colour they show.
+ * A real photo (transparent cut-out) for a model. `headlight` is where the lamp sits as fractions of the image and `facing`
+ * is which way the bike points, so the hero beam and glow stay locked to it if the file is replaced.
+ * Photos are only offered in the colour they show.
  */
 export interface BikePhoto {
   src: string;
@@ -109,11 +110,11 @@ export interface BikePhoto {
   height: number;
   colour: string;
   alt: string;
+  facing: "left" | "right";
   headlight: { x: number; y: number };
 }
-/** NOTE: the supplied r15m.png shows a bike with an "R9" side decal. Confirm it is the model you want on the R15M page. */
 export const BIKE_PHOTOS: Record<string, BikePhoto> = {
-  r15: { src: "/images/bikes/r15m.png", width: 514, height: 384, colour: "Racing Blue", alt: "Blue Yamaha supersport motorcycle, three-quarter front view", headlight: { x: 0.288, y: 0.151 } },
+  r15: { src: "/images/bikes/r15m.png", width: 1064, height: 685, colour: "Metallic Silver", alt: "Yamaha R15M in Metallic Silver, side view", facing: "right", headlight: { x: 0.895, y: 0.31 } },
 };
 
 export interface Flagship {

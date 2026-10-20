@@ -11,6 +11,7 @@ import { useGear } from "./gear-context";
 gsap.registerPlugin(ScrollTrigger);
 
 const photo = BIKE_PHOTOS.r15;
+const facingLeft = photo.facing === "left";
 const DRAPE_FULL = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
 /** the cloth ends up bunched in the top-left corner */
 const DRAPE_PULLED = "polygon(0% 0%, 24% 0%, 9% 24%, 0% 42%)";
@@ -73,17 +74,17 @@ export function Hero() {
       <div aria-hidden data-glow className="absolute -ml-[40vmax] -mt-[40vmax] left-[52%] top-[52%] size-[80vmax] rounded-full bg-[radial-gradient(circle,rgba(70,125,255,0.55)_0%,rgba(40,80,200,0.18)_35%,transparent_62%)] [--g:0.3] [--go:0.1] [opacity:var(--go)] [scale:var(--g)] motion-reduce:[--g:1.6] motion-reduce:[--go:0.9]" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-[34svh] bg-[linear-gradient(to_top,rgba(4,6,12,0.95),transparent)]" />
 
-      {/* the bike: a real cut-out photo (it faces left, so the beam travels left from its headlight) */}
-      <div className="absolute bottom-[18svh] right-[2vw] w-[96vw] sm:bottom-[8svh] sm:w-[min(80vw,760px,76svh)] lg:bottom-[6svh] lg:right-[9vw] lg:w-[min(58vw,880px,78svh)]" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
-        <div aria-hidden className="absolute inset-x-[6%] -bottom-[1%] h-[7%] rounded-full bg-black/70 blur-xl" />
-        <div data-bike className="relative size-full origin-[35%_85%] [--b:0.22] [--bs:1.07] [filter:brightness(var(--b))] [scale:var(--bs)] motion-reduce:[--b:1] motion-reduce:[--bs:1]">
-          <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} priority sizes="(min-width: 1024px) 58vw, 96vw" draggable={false} className="block h-auto w-full select-none" />
+      {/* the bike: a real cut-out photo; the beam travels the way it faces, from its headlight */}
+      <div className="absolute bottom-[18svh] right-[-2vw] w-[104vw] sm:bottom-[8svh] sm:right-[2vw] sm:w-[min(84vw,820px,80svh)] lg:bottom-[6svh] lg:right-[12vw] lg:w-[min(60vw,960px,86svh)]" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
+        <div aria-hidden className="absolute inset-x-[6%] -bottom-[1%] h-[6%] rounded-full bg-black/70 blur-xl" />
+        <div data-bike className="relative size-full origin-[50%_85%] [--b:0.22] [--bs:1.07] [filter:brightness(var(--b))] [scale:var(--bs)] motion-reduce:[--b:1] motion-reduce:[--bs:1]">
+          <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} priority sizes="(min-width: 1024px) 60vw, 104vw" draggable={false} className="block h-auto w-full select-none drop-shadow-[0_0_34px_rgba(70,120,255,0.3)]" />
           {/* lamp bloom + beam are placed from the headlight's position in the photo */}
           <div data-lamp className="pointer-events-none absolute -ml-9 -mt-9 size-[4.5rem] rounded-full bg-[radial-gradient(circle,rgba(225,240,255,0.95),rgba(120,170,255,0.4)_40%,transparent_70%)] blur-[2px] [--lamp:0] [opacity:var(--lamp)] motion-reduce:[--lamp:1]" style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%` }} />
           <div
             data-beam
-            className="pointer-events-none absolute h-[78%] w-[125%] -translate-x-full -translate-y-1/2 origin-right bg-[linear-gradient(to_left,rgba(214,232,255,0.7),rgba(150,190,255,0.22)_45%,transparent)] mix-blend-screen [--beam:0] [--beam-o:0] [opacity:var(--beam-o)] [scale:var(--beam)_1] motion-reduce:[--beam:1] motion-reduce:[--beam-o:1]"
-            style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%`, clipPath: "polygon(100% 47%, 0% 0%, 0% 100%, 100% 53%)", filter: "blur(2px)" }}
+            className={`pointer-events-none absolute h-[78%] w-[90%] -translate-y-1/2 mix-blend-screen [--beam:0] [--beam-o:0] [opacity:var(--beam-o)] [scale:var(--beam)_1] motion-reduce:[--beam:1] motion-reduce:[--beam-o:1] ${facingLeft ? "origin-right -translate-x-full bg-[linear-gradient(to_left,rgba(214,232,255,0.7),rgba(150,190,255,0.22)_45%,transparent)]" : "origin-left bg-[linear-gradient(to_right,rgba(214,232,255,0.7),rgba(150,190,255,0.22)_45%,transparent)]"}`}
+            style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%`, clipPath: facingLeft ? "polygon(100% 47%, 0% 0%, 0% 100%, 100% 53%)" : "polygon(0% 47%, 100% 0%, 100% 100%, 0% 53%)", filter: "blur(2px)" }}
           />
         </div>
       </div>

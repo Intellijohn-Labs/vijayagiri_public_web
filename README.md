@@ -41,11 +41,11 @@ the three flagship turntable entries, routes and riding gear.
 ## Things to know
 
 - **One real photo so far.** The R15M slot uses a transparent cut-out (`public/images/bikes/r15m.png`, configured in
-  `BIKE_PHOTOS` in `src/lib/data.ts`). `headlight` there is the lamp's position as fractions of the image, and the hero beam
-  and glow are placed from it, so they stay locked on if you replace the file (update `width`, `height` and `headlight`).
+  `BIKE_PHOTOS` in `src/lib/data.ts`). `headlight` there is the lamp's position as fractions of the image and `facing` is the way the bike points; the hero beam
+  and glow are placed from them, so they stay locked on if you replace the file (update `width`, `height`, `facing` and `headlight`).
   The MT-15 and Aerox are still vector illustrations (`bike-art.tsx`) that turn in CSS 3D. A photo can only show the colour it
-  was shot in, so that model offers just that colour and tilts a little instead of turning. The file is small (about 500px
-  wide), so a larger cut-out will look sharper. Next caches optimised images, so a replaced file can take a while to show.
+  was shot in, so that model offers just that colour and tilts a little instead of turning. The cut-out is about 1,060px wide, so it
+  is sharp on most screens; use a larger one for big retina displays. Next caches optimised images, so a replaced file can take a while to show.
 - **Booking has no backend.** Submitting the test-ride form opens a pre-filled WhatsApp message to the chosen showroom; the
   slot is only confirmed when the showroom replies. Nothing is stored. Wire up an API route here if you want real bookings.
 - **Reduced motion.** With `prefers-reduced-motion`, there is no pinning, no smooth-scroll takeover and no scrubbed animation:
