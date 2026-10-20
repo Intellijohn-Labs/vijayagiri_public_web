@@ -106,7 +106,11 @@ export function Turntable({ kind, body, accent, glow, photo }: TurntableProps) {
       >
         <motion.div className="absolute inset-0 [transform-style:preserve-3d]" style={{ rotateY: angle }}>
           {photo ? (
+            <>
             <Image src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} sizes="(min-width: 1024px) 45vw, 90vw" loading="eager" draggable={false} className="pointer-events-none block size-full select-none object-contain drop-shadow-[0_24px_28px_rgba(0,0,0,0.55)]" />
+            {/* soft lamp bloom, placed from this photo's own headlight position so it follows the tilt */}
+            <div aria-hidden className="pointer-events-none absolute -ml-7 -mt-7 size-14 animate-pulse rounded-full bg-[radial-gradient(circle,rgba(225,240,255,0.9),rgba(120,170,255,0.3)_45%,transparent_70%)] blur-[2px]" style={{ left: `${photo.headlight.x * 100}%`, top: `${photo.headlight.y * 100}%` }} />
+            </>
           ) : (
             LAYERS.map((z, i) => (
               <div key={z} className="absolute inset-0" style={{ transform: `translateZ(${z}px)`, filter: i < LAYERS.length - 1 ? `brightness(${0.32 + i * 0.05})` : undefined }}>

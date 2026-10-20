@@ -21,9 +21,6 @@ export const SITE = {
   workingDays: "",
   /** Open / closed badges are computed in this time zone, not the visitor's. */
   timeZone: "Asia/Kolkata",
-  showPrices: true,
-  priceNote:
-    "*Indicative ex-showroom price. On-road price varies by showroom, variant and colour; please confirm with your showroom.",
 } as const;
 
 /* ───────────── showrooms ───────────── */
@@ -73,24 +70,22 @@ export interface Model {
   tagline: string;
   /** Numeric values drive the count-up and the comparison bars; the strings are shown as-is. */
   specs: {
-    engine: string; mileage: string; power: string; torque: string; weight: string; seatHeight: string; braking: string;
+    engine: string; mileage: string; power: string; torque: string; weight: string; seatHeight: string; braking: string; transmission: string;
     powerPS: number; torqueNm: number; weightKg: number; mileageKmpl: number;
   };
   colours: string[];
   features: string[];
-  /** Indicative starting ex-showroom price in rupees (check before launch). */
-  exShowroom: number;
 }
 
 /** Specs are indicative figures from the dealership's internal catalogue: check them against the official brochures. */
 export const MODELS: Model[] = [
-  { id: "r15", name: "YZF-R15 V4 / R15M", short: "R15M", series: "R-World", tagline: "Born on the track. Built for the street.", specs: { engine: "155 cc", mileage: "45 kmpl", power: "18.4 PS @ 10,000 rpm", torque: "14.2 Nm @ 7,500 rpm", weight: "142 kg", seatHeight: "815 mm", braking: "Dual-channel ABS", powerPS: 18.4, torqueNm: 14.2, weightKg: 142, mileageKmpl: 45 }, colours: ["Racing Blue", "Metallic Red", "Dark Knight", "Metallic Silver", "Matte Black"], features: ["Quick Shifter (R15M)", "Traction Control System", "Variable Valve Actuation (VVA)", "Assist & Slipper Clutch", "Y-Connect Bluetooth", "Upside-down front forks"], exShowroom: 182000 },
-  { id: "mt15-v2", name: "MT-15 V2", short: "MT-15", series: "MT Hyper Naked", tagline: "The dark side of Japan. Hyper naked attitude.", specs: { engine: "155 cc", mileage: "56 kmpl", power: "18.1 PS @ 10,000 rpm", torque: "14.1 Nm @ 7,500 rpm", weight: "141 kg", seatHeight: "810 mm", braking: "Dual-channel ABS", powerPS: 18.1, torqueNm: 14.1, weightKg: 141, mileageKmpl: 56 }, colours: ["Cyan Storm", "Ice Fluo-Vermillion", "Racing Blue", "Metallic Black"], features: ["Traction Control System", "Variable Valve Actuation (VVA)", "Assist & Slipper Clutch", "Y-Connect Bluetooth", "Full LED headlamp", "Upside-down front forks"], exShowroom: 168000 },
-  { id: "aerox-155", name: "Aerox 155", short: "Aerox", series: "Maxi Sports Scooter", tagline: "Maxi-sports scooter with real performance.", specs: { engine: "155 cc", mileage: "48 kmpl", power: "15.0 PS @ 8,000 rpm", torque: "13.9 Nm @ 6,500 rpm", weight: "126 kg", seatHeight: "790 mm", braking: "Single-channel ABS", powerPS: 15, torqueNm: 13.9, weightKg: 126, mileageKmpl: 48 }, colours: ["Racing Blue", "Metallic Black", "Grey Vermillion", "Metallic Silver"], features: ["Variable Valve Actuation (VVA)", "Traction Control System", "Y-Connect Bluetooth", "Smart Key", "Full digital LCD cluster", "Large under-seat storage"], exShowroom: 151000 },
-  { id: "fzs-fi-v4", name: "FZS-FI V4", short: "FZS-FI", series: "FZ Series", tagline: "Street style, everyday confidence.", specs: { engine: "149 cc", mileage: "49 kmpl", power: "12.4 PS @ 7,250 rpm", torque: "13.3 Nm @ 5,500 rpm", weight: "138 kg", seatHeight: "790 mm", braking: "Single-channel ABS", powerPS: 12.4, torqueNm: 13.3, weightKg: 138, mileageKmpl: 49 }, colours: ["Matte Black", "Cyan Blue", "Metallic Red", "Racing Blue"], features: ["Fuel-injected engine", "Full LED headlamp", "Bluetooth connectivity (Deluxe)", "Muscular fuel tank design", "Single-channel ABS"], exShowroom: 121000 },
-  { id: "fz-x", name: "FZ-X", short: "FZ-X", series: "FZ Series", tagline: "Neo-retro street with a modern heart.", specs: { engine: "149 cc", mileage: "50 kmpl", power: "12.4 PS @ 7,250 rpm", torque: "13.3 Nm @ 5,500 rpm", weight: "139 kg", seatHeight: "810 mm", braking: "Single-channel ABS", powerPS: 12.4, torqueNm: 13.3, weightKg: 139, mileageKmpl: 50 }, colours: ["Matte Copper", "Matte Black", "Matte Green", "Metallic Blue"], features: ["Neo-retro round LED headlamp", "Y-Connect Bluetooth", "Fuel-injected engine", "Block-pattern tyres", "Single-channel ABS"], exShowroom: 138000 },
-  { id: "rayzr-125", name: "RayZR 125 Fi Hybrid", short: "RayZR", series: "Hybrid Scooter", tagline: "Hybrid power. Street-rally spirit.", specs: { engine: "125 cc", mileage: "66 kmpl", power: "8.2 PS @ 6,500 rpm", torque: "10.3 Nm @ 5,000 rpm", weight: "99 kg", seatHeight: "785 mm", braking: "Drum / Disc", powerPS: 8.2, torqueNm: 10.3, weightKg: 99, mileageKmpl: 66 }, colours: ["Metallic Black", "Cyan Blue", "Matte Red", "Ice Silver", "Racing Blue"], features: ["Hybrid assist (Smart Motor Generator)", "Idle Stop-Start system", "Y-Connect Bluetooth (select variants)", "LED headlamp", "Side-stand engine cut-off"], exShowroom: 82000 },
-  { id: "fascino-125", name: "Fascino 125 Fi Hybrid", short: "Fascino", series: "Hybrid Scooter", tagline: "Stylish, light and fuel smart.", specs: { engine: "125 cc", mileage: "68 kmpl", power: "8.2 PS @ 6,500 rpm", torque: "10.3 Nm @ 5,000 rpm", weight: "99 kg", seatHeight: "780 mm", braking: "Drum / Disc", powerPS: 8.2, torqueNm: 10.3, weightKg: 99, mileageKmpl: 68 }, colours: ["Vivid Red", "Metallic White", "Dark Matte Blue", "Sparkle Green", "Metallic Black"], features: ["Hybrid assist (Smart Motor Generator)", "Idle Stop-Start system", "LED headlamp", "Large under-seat storage", "Side-stand engine cut-off"], exShowroom: 80000 },
+  { id: "r15", name: "YZF-R15 V4 / R15M", short: "R15M", series: "R-World", tagline: "Born on the track. Built for the street.", specs: { engine: "155 cc", mileage: "45 kmpl", power: "18.4 PS @ 10,000 rpm", torque: "14.2 Nm @ 7,500 rpm", weight: "142 kg", seatHeight: "815 mm", braking: "Dual-channel ABS", transmission: "6-speed", powerPS: 18.4, torqueNm: 14.2, weightKg: 142, mileageKmpl: 45 }, colours: ["Racing Blue", "Metallic Red", "Dark Knight", "Metallic Silver", "Matte Black"], features: ["Quick Shifter (R15M)", "Traction Control System", "Variable Valve Actuation (VVA)", "Assist & Slipper Clutch", "Y-Connect Bluetooth", "Upside-down front forks"] },
+  { id: "mt15-v2", name: "MT-15 V2", short: "MT-15", series: "MT Hyper Naked", tagline: "The dark side of Japan. Hyper naked attitude.", specs: { engine: "155 cc", mileage: "56 kmpl", power: "18.1 PS @ 10,000 rpm", torque: "14.1 Nm @ 7,500 rpm", weight: "141 kg", seatHeight: "810 mm", braking: "Dual-channel ABS", transmission: "6-speed", powerPS: 18.1, torqueNm: 14.1, weightKg: 141, mileageKmpl: 56 }, colours: ["Cyan Storm", "Ice Fluo-Vermillion", "Racing Blue", "Metallic Black"], features: ["Traction Control System", "Variable Valve Actuation (VVA)", "Assist & Slipper Clutch", "Y-Connect Bluetooth", "Full LED headlamp", "Upside-down front forks"] },
+  { id: "aerox-155", name: "Aerox 155", short: "Aerox", series: "Maxi Sports Scooter", tagline: "Maxi-sports scooter with real performance.", specs: { engine: "155 cc", mileage: "48 kmpl", power: "15.0 PS @ 8,000 rpm", torque: "13.9 Nm @ 6,500 rpm", weight: "126 kg", seatHeight: "790 mm", braking: "Single-channel ABS", transmission: "CVT automatic", powerPS: 15, torqueNm: 13.9, weightKg: 126, mileageKmpl: 48 }, colours: ["Racing Blue", "Metallic Black", "Grey Vermillion", "Metallic Silver"], features: ["Variable Valve Actuation (VVA)", "Traction Control System", "Y-Connect Bluetooth", "Smart Key", "Full digital LCD cluster", "Large under-seat storage"] },
+  { id: "fzs-fi-v4", name: "FZS-FI V4", short: "FZS-FI", series: "FZ Series", tagline: "Street style, everyday confidence.", specs: { engine: "149 cc", mileage: "49 kmpl", power: "12.4 PS @ 7,250 rpm", torque: "13.3 Nm @ 5,500 rpm", weight: "138 kg", seatHeight: "790 mm", braking: "Single-channel ABS", transmission: "5-speed", powerPS: 12.4, torqueNm: 13.3, weightKg: 138, mileageKmpl: 49 }, colours: ["Matte Black", "Cyan Blue", "Metallic Red", "Racing Blue"], features: ["Fuel-injected engine", "Full LED headlamp", "Bluetooth connectivity (Deluxe)", "Muscular fuel tank design", "Single-channel ABS"] },
+  { id: "fz-x", name: "FZ-X", short: "FZ-X", series: "FZ Series", tagline: "Neo-retro street with a modern heart.", specs: { engine: "149 cc", mileage: "50 kmpl", power: "12.4 PS @ 7,250 rpm", torque: "13.3 Nm @ 5,500 rpm", weight: "139 kg", seatHeight: "810 mm", braking: "Single-channel ABS", transmission: "5-speed", powerPS: 12.4, torqueNm: 13.3, weightKg: 139, mileageKmpl: 50 }, colours: ["Matte Copper", "Matte Black", "Matte Green", "Metallic Blue"], features: ["Neo-retro round LED headlamp", "Y-Connect Bluetooth", "Fuel-injected engine", "Block-pattern tyres", "Single-channel ABS"] },
+  { id: "rayzr-125", name: "RayZR 125 Fi Hybrid", short: "RayZR", series: "Hybrid Scooter", tagline: "Hybrid power. Street-rally spirit.", specs: { engine: "125 cc", mileage: "66 kmpl", power: "8.2 PS @ 6,500 rpm", torque: "10.3 Nm @ 5,000 rpm", weight: "99 kg", seatHeight: "785 mm", braking: "Drum / Disc", transmission: "CVT automatic", powerPS: 8.2, torqueNm: 10.3, weightKg: 99, mileageKmpl: 66 }, colours: ["Metallic Black", "Cyan Blue", "Matte Red", "Ice Silver", "Racing Blue"], features: ["Hybrid assist (Smart Motor Generator)", "Idle Stop-Start system", "Y-Connect Bluetooth (select variants)", "LED headlamp", "Side-stand engine cut-off"] },
+  { id: "fascino-125", name: "Fascino 125 Fi Hybrid", short: "Fascino", series: "Hybrid Scooter", tagline: "Stylish, light and fuel smart.", specs: { engine: "125 cc", mileage: "68 kmpl", power: "8.2 PS @ 6,500 rpm", torque: "10.3 Nm @ 5,000 rpm", weight: "99 kg", seatHeight: "780 mm", braking: "Drum / Disc", transmission: "CVT automatic", powerPS: 8.2, torqueNm: 10.3, weightKg: 99, mileageKmpl: 68 }, colours: ["Vivid Red", "Metallic White", "Dark Matte Blue", "Sparkle Green", "Metallic Black"], features: ["Hybrid assist (Smart Motor Generator)", "Idle Stop-Start system", "LED headlamp", "Large under-seat storage", "Side-stand engine cut-off"] },
 ];
 
 export const modelById = (id: string) => MODELS.find((m) => m.id === id);
@@ -114,6 +109,7 @@ export interface BikePhoto {
   headlight: { x: number; y: number };
 }
 export const BIKE_PHOTOS: Record<string, BikePhoto> = {
+  mt15: { src: "/images/bikes/mt15.png", width: 878, height: 751, colour: "Cyan Storm", alt: "Yamaha MT-15 in Cyan Storm, three-quarter front view", facing: "right", headlight: { x: 0.74, y: 0.331 } },
   r15: { src: "/images/bikes/r15m.png", width: 1064, height: 685, colour: "Metallic Silver", alt: "Yamaha R15M in Metallic Silver, side view", facing: "right", headlight: { x: 0.895, y: 0.31 } },
 };
 
@@ -129,7 +125,7 @@ export interface Flagship {
 }
 export const FLAGSHIPS: Flagship[] = [
   { modelId: "r15", kind: "r15", label: "Yamaha R15M", outline: "R 15 M", colours: ["Racing Blue", "Metallic Silver"], quickshifter: true, photo: BIKE_PHOTOS.r15 },
-  { modelId: "mt15-v2", kind: "mt15", label: "Yamaha MT-15 V2", outline: "M T - 15", colours: ["Cyan Storm", "Racing Blue"], quickshifter: false },
+  { modelId: "mt15-v2", kind: "mt15", label: "Yamaha MT-15 V2", outline: "M T - 15", colours: ["Cyan Storm", "Racing Blue"], quickshifter: false, photo: BIKE_PHOTOS.mt15 },
   { modelId: "aerox-155", kind: "aerox", label: "Yamaha Aerox 155", outline: "A E R O X", colours: ["Racing Blue", "Metallic Black"], quickshifter: false },
 ];
 
@@ -188,7 +184,6 @@ export const dialOf = (b: Branch) => b.phone ?? SITE.hotline;
 export const waOf = (b: Branch) => b.whatsapp ?? b.phone ?? SITE.hotline;
 export const hasOwnLine = (b: Branch) => Boolean(b.phone);
 export const branchById = (id: string) => BRANCHES.find((b) => b.id === id) ?? BRANCHES[0];
-export const fmtPrice = (n: number) => (n >= 100000 ? `₹${(n / 100000).toFixed(2).replace(/0$/, "")} L` : `₹${n.toLocaleString("en-IN")}`);
 export const prettyPhone = (d: string) => {
   const m = /^91(\d{5})(\d{5})$/.exec(d);
   return m ? `+91 ${m[1]} ${m[2]}` : `+${d}`;

@@ -35,14 +35,14 @@ the three flagship turntable entries, routes and riding gear.
 - A showroom with `phone: null` falls back to the central hotline, and its card says so.
 - `SITE.hotlineDisplay` is the text shown for the hotline; the dial and WhatsApp links use `SITE.hotline`.
 - `SITE.botWhatsapp` is the number behind the floating chat button (the 24/7 WhatsApp bot).
-- Prices and specs are indicative figures from the dealership's internal catalogue. Check them, or set `SITE.showPrices` to `false`.
+- Specs are indicative figures from the dealership's internal catalogue; check them against the official brochures. The site shows no prices.
 - Route copy is deliberately general. Have someone who rides each road review it.
 
 ## Things to know
 
 - **One real photo so far.** The R15M slot uses a transparent cut-out (`public/images/bikes/r15m.png`, configured in
   `BIKE_PHOTOS` in `src/lib/data.ts`). `headlight` there is the lamp's position as fractions of the image and `facing` is the way the bike points; the hero beam
-  and glow are placed from them, so they stay locked on if you replace the file (update `width`, `height`, `facing` and `headlight`).
+  and glow are placed from them, so they stay locked on if you replace the file (update `width`, `height`, `facing` and `headlight`). The R15M and MT-15 both have photos now.
   The MT-15 and Aerox are still vector illustrations (`bike-art.tsx`) that turn in CSS 3D. A photo can only show the colour it
   was shot in, so that model offers just that colour and tilts a little instead of turning. The cut-out is about 1,060px wide, so it
   is sharp on most screens; use a larger one for big retina displays. Next caches optimised images, so a replaced file can take a while to show.

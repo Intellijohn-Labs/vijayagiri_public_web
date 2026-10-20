@@ -5,7 +5,7 @@ import { AnimatePresence, animate, motion, useReducedMotion } from "framer-motio
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, MessageCircle, Zap } from "lucide-react";
-import { COLOUR_HEX, FLAGSHIPS, SITE, fmtPrice, modelById } from "@/lib/data";
+import { COLOUR_HEX, FLAGSHIPS, SITE, modelById } from "@/lib/data";
 import { waLink } from "@/lib/whatsapp";
 import { useBooking } from "./booking-context";
 import { useGearSection } from "./gear-context";
@@ -124,17 +124,13 @@ export function Showcase() {
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-xs sm:mt-4">
                   <span className="rounded-full border border-white/15 px-3 py-1 font-semibold text-slate-200">{m.specs.engine}</span>
                   <span className="rounded-full border border-white/15 px-3 py-1 font-semibold text-slate-200">{m.specs.braking}</span>
+                  <span className="rounded-full border border-white/15 px-3 py-1 font-semibold text-slate-200">{m.specs.transmission}</span>
                   {f.quickshifter && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-3 py-1 font-bold text-white shadow-lg shadow-blue-600/30">
                       <Zap className="size-3.5" /> Quick Shifter
                     </span>
                   )}
                 </div>
-                {SITE.showPrices && (
-                  <p className="mt-3 text-sm text-slate-300 sm:mt-4">
-                    From <span className="font-display text-2xl font-bold text-white">{fmtPrice(m.exShowroom)}*</span> <span className="text-xs text-slate-500">ex-showroom, indicative</span>
-                  </p>
-                )}
               </motion.div>
             </AnimatePresence>
 
