@@ -109,6 +109,7 @@ export interface BikePhoto {
   headlight: { x: number; y: number };
 }
 export const BIKE_PHOTOS: Record<string, BikePhoto> = {
+  aerox: { src: "/images/bikes/aerox.png", width: 640, height: 524, colour: "Metallic Black", alt: "Yamaha Aerox 155 in Metallic Black, three-quarter front view", facing: "right", headlight: { x: 0.789, y: 0.41 } },
   mt15: { src: "/images/bikes/mt15.png", width: 878, height: 751, colour: "Cyan Storm", alt: "Yamaha MT-15 in Cyan Storm, three-quarter front view", facing: "right", headlight: { x: 0.74, y: 0.331 } },
   r15: { src: "/images/bikes/r15m.png", width: 1064, height: 685, colour: "Metallic Silver", alt: "Yamaha R15M in Metallic Silver, side view", facing: "right", headlight: { x: 0.895, y: 0.31 } },
 };
@@ -126,7 +127,7 @@ export interface Flagship {
 export const FLAGSHIPS: Flagship[] = [
   { modelId: "r15", kind: "r15", label: "Yamaha R15M", outline: "R 15 M", colours: ["Racing Blue", "Metallic Silver"], quickshifter: true, photo: BIKE_PHOTOS.r15 },
   { modelId: "mt15-v2", kind: "mt15", label: "Yamaha MT-15 V2", outline: "M T - 15", colours: ["Cyan Storm", "Racing Blue"], quickshifter: false, photo: BIKE_PHOTOS.mt15 },
-  { modelId: "aerox-155", kind: "aerox", label: "Yamaha Aerox 155", outline: "A E R O X", colours: ["Racing Blue", "Metallic Black"], quickshifter: false },
+  { modelId: "aerox-155", kind: "aerox", label: "Yamaha Aerox 155", outline: "A E R O X", colours: ["Racing Blue", "Metallic Black"], quickshifter: false, photo: BIKE_PHOTOS.aerox },
 ];
 
 /* ───────────── gear story ───────────── */

@@ -131,25 +131,24 @@ export function Showcase() {
                     </span>
                   )}
                 </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2 sm:mt-4">
+                  <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Colour</span>
+                  {colours.map((c, ci) => (
+                    <button
+                      key={c}
+                      disabled={colours.length === 1}
+                      type="button"
+                      aria-label={c}
+                      aria-pressed={ci === Math.min(colourIdx[index], colours.length - 1)}
+                      onClick={() => setColourIdx((prev) => prev.map((v, i) => (i === index ? ci : v)))}
+                      className={`size-7 rounded-full border-2 transition-transform enabled:hover:scale-110 enabled:active:scale-90 ${ci === Math.min(colourIdx[index], colours.length - 1) ? "border-white shadow-[0_0_0_3px_rgba(47,107,255,0.6)]" : "border-white/25"}`}
+                      style={{ background: COLOUR_HEX[c] }}
+                    />
+                  ))}
+                  <span className="ml-1 text-sm font-medium text-slate-200">{colour}</span>
+                </div>
               </motion.div>
             </AnimatePresence>
-
-            <div className="mt-3 flex flex-wrap items-center gap-2 sm:mt-4">
-              <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Colour</span>
-              {colours.map((c, ci) => (
-                <button
-                  key={c}
-                  disabled={colours.length === 1}
-                  type="button"
-                  aria-label={c}
-                  aria-pressed={ci === Math.min(colourIdx[index], colours.length - 1)}
-                  onClick={() => setColourIdx((prev) => prev.map((v, i) => (i === index ? ci : v)))}
-                  className={`size-7 rounded-full border-2 transition-transform enabled:hover:scale-110 enabled:active:scale-90 ${ci === Math.min(colourIdx[index], colours.length - 1) ? "border-white shadow-[0_0_0_3px_rgba(47,107,255,0.6)]" : "border-white/25"}`}
-                  style={{ background: COLOUR_HEX[c] }}
-                />
-              ))}
-              <span className="ml-1 text-sm font-medium text-slate-200">{colour}</span>
-            </div>
 
             <div className="mt-4 flex flex-wrap gap-3">
               <button
@@ -178,7 +177,7 @@ export function Showcase() {
             <div className="relative w-full">
               <Mist trigger={index} />
               <AnimatePresence mode="wait">
-                <motion.div key={`${f.kind}-${colour}`} initial={{ opacity: 0, x: 60, filter: "blur(16px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -60, filter: "blur(16px)" }} transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}>
+                <motion.div key={`${f.kind}-${colour}`} style={{ transformPerspective: 1400 }} initial={{ opacity: 0, x: 70, rotateY: 22, filter: "blur(16px)" }} animate={{ opacity: 1, x: 0, rotateY: 0, filter: "blur(0px)" }} exit={{ opacity: 0, x: -70, rotateY: -22, filter: "blur(16px)" }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
                   <Turntable kind={f.kind} body={body} accent={accent} glow="rgba(60,110,255,0.55)" photo={f.photo} />
                 </motion.div>
               </AnimatePresence>
