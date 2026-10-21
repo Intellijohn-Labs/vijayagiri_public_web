@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronsDown } from "lucide-react";
 import { BIKE_PHOTOS } from "@/lib/data";
+import { createClothGL, foldAt, type ClothGL } from "@/lib/cloth-gl";
 import { useGear } from "./gear-context";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,6 +53,21 @@ function drawCloth(p: number, c: ClothParts) {
   c.sway.style.transform = `translateX(${(-p * 3.5).toFixed(2)}%)`; // the cloth drags back as it is pulled
 }
 
+const smooth = (a: number, b: number, x: number) => {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
+
+/** A paint glint that rides just behind the fold, so the paint catches the light as it is uncovered (nose, tank, tail). */
+function placeGlint(p: number, glint: HTMLElement | null) {
+  if (!glint || !cover) return;
+  const f = foldAt(p, cover.width, cover.height);
+  const xCover = (f - 0.3875 * 0.5 * cover.height) / 0.9218;           // where the fold crosses mid-height
+  const c = (xCover - cover.pad) / photo.width + 0.04;                 // as a fraction of the photo, a touch behind the fold
+  glint.style.setProperty("--glint", ((1.3 - c) / 1.6 * 100).toFixed(2));
+  glint.style.opacity = (smooth(0.06, 0.14, p) * (1 - smooth(0.62, 0.74, p)) * 0.85).toFixed(3);
+}
+
 /**
  * Pinned hero. While pinned, scroll drives one scrubbed timeline: the cloth is whipped off the R15M from the front wheel
  * back to the tail, then the headlight beam fires, a specular sheen sweeps the bodywork and the type shifts.
@@ -79,6 +95,32 @@ export function Hero() {
       const edge = { p: 0 };
       if (parts) drawCloth(0, parts);
 
+      // Prefer the WebGL cloth (real curl, flutter and re-lighting). At rest the static cover stays on screen, so the
+      // resting alignment is pixel-exact; the canvas takes over the moment the cloth starts to move.
+      const clothEl = el.querySelector<HTMLElement>("[data-cloth]");
+      const canvas = el.querySelector<HTMLCanvasElement>("[data-cloth-gl]");
+      const glint = el.querySelector<HTMLElement>("[data-glint]");
+      let clothGL: ClothGL | null = null;
+      let glOn = false;
+      const apply = (p: number) => {
+        if (glOn && clothGL && canvas && clothEl) {
+          const moving = p > 0.0005;
+          canvas.style.opacity = moving ? "1" : "0";
+          clothEl.style.opacity = moving ? "0" : "1";
+          clothGL.setProgress(p);
+        } else if (parts) {
+          drawCloth(p, parts);
+        }
+        placeGlint(p, glint);
+      };
+      if (cover && clothEl && canvas) {
+        clothGL = createClothGL({ canvas, anchor: clothEl, src: cover.src, width: cover.width, height: cover.height });
+        clothGL?.ready.then((ok) => {
+          glOn = ok;
+          apply(edge.p);
+        });
+      }
+
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
@@ -92,20 +134,23 @@ export function Hero() {
         },
       });
       tl.to(q("[data-cue]"), { opacity: 0, y: 16, duration: 0.8 }, 0)
-        // the cloth comes off: front wheel first, then up and back to the tail
-        .to(edge, { p: 1, duration: 6.2, ease: "power1.inOut", onUpdate: () => parts && drawCloth(edge.p, parts) }, 0.4)
-        .to(q("[data-bike]"), { "--b": 1, duration: 5.6, ease: "power1.out" }, 1.4)
+        // the cloth is whipped off: grabbed at the front wheel / screen, curled up and back, then thrown clear
+        .to(edge, { p: 1, duration: 6.5, ease: "sine.inOut", onUpdate: () => apply(edge.p) }, 0.3)
+        .to(q("[data-bike]"), { "--b": 1, duration: 4.8, ease: "power1.out" }, 0.8)
         .to(q("[data-headline]"), { yPercent: -6, duration: 8 }, 0)
         .to(q("[data-sub]"), { opacity: 1, letterSpacing: "0.42em", duration: 3 }, 3.2)
-        .to(q("[data-glow]"), { "--g": 1.6, "--go": 0.95, duration: 4, ease: "power2.out" }, 4.4)
-        // hand-off: once the bodywork is clear the lamp wakes, the beam fires and the sheen rolls tail to nose
-        .to(q("[data-lamp]"), { "--lamp": 1, duration: 1.2 }, 4.6)
-        .to(q("[data-beam]"), { "--beam": 1, "--beam-o": 1, duration: 3, ease: "power2.out" }, 4.9)
-        .to(q("[data-sheen]"), { "--sheen": 0, duration: 3.2, ease: "power1.inOut" }, 6.0)
+        .to(q("[data-glow]"), { "--g": 1.6, "--go": 0.95, duration: 2.4, ease: "power2.out" }, 5.6)
+        // hand-off: the tail clears, the headlight flicks on (catch, dip, on) and a fast gloss sweep runs nose to tail
+        .to(q("[data-lamp]"), { keyframes: [{ "--lamp": 1, duration: 0.07 }, { "--lamp": 0.15, duration: 0.07 }, { "--lamp": 1, duration: 0.1 }] }, 5.6)
+        .to(q("[data-beam]"), { keyframes: [{ "--beam": 1, "--beam-o": 1, duration: 0.12 }, { "--beam-o": 0.2, duration: 0.07 }, { "--beam-o": 1, duration: 0.12 }] }, 5.62)
+        .to(q("[data-sheen]"), { "--sheen": 100, duration: 0.75, ease: "power2.inOut" }, 5.8)
         .to(q("[data-headline]"), { opacity: 0, filter: "blur(10px)", duration: 1.6 }, 8.4)
         .to(q("[data-lead]"), { opacity: 1, y: 0, duration: 1.4 }, 8.6);
 
       return () => {
+        clothGL?.destroy();
+        if (canvas) canvas.style.opacity = "";
+        if (clothEl) clothEl.style.opacity = "";
         if (parts) {
           parts.clip.style.clipPath = "";
           parts.sway.style.transform = "";
@@ -137,9 +182,24 @@ export function Hero() {
           <div
             data-sheen
             aria-hidden
-            className="pointer-events-none absolute inset-0 mix-blend-overlay [--sheen:100] [background-position:calc(var(--sheen)*1%)_0] motion-reduce:hidden"
+            className="pointer-events-none absolute inset-0 mix-blend-overlay [--sheen:0] [background-position:calc(var(--sheen)*1%)_0] motion-reduce:hidden"
             style={{
               backgroundImage: "linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.15) 44%, rgba(255,255,255,0.95) 50%, rgba(200,220,255,0.18) 56%, transparent 62%)",
+              backgroundSize: "260% 100%",
+              backgroundRepeat: "no-repeat",
+              WebkitMaskImage: `url(${photo.src})`,
+              maskImage: `url(${photo.src})`,
+              WebkitMaskSize: "100% 100%",
+              maskSize: "100% 100%",
+            }}
+          />
+          {/* paint glint that rides just behind the fold as the cloth comes off (driven from the timeline) */}
+          <div
+            data-glint
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-0 mix-blend-overlay [--glint:100] [background-position:calc(var(--glint)*1%)_0] motion-reduce:hidden"
+            style={{
+              backgroundImage: "linear-gradient(112deg, transparent 40%, rgba(255,255,255,0.7) 49%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0.7) 51%, transparent 60%)",
               backgroundSize: "260% 100%",
               backgroundRepeat: "no-repeat",
               WebkitMaskImage: `url(${photo.src})`,
@@ -179,6 +239,9 @@ export function Hero() {
           </div>
         )}
       </div>
+
+      {/* WebGL cloth: the whole hero, because the sheet flies well clear of the bike. Hidden until the cloth moves. */}
+      <canvas data-cloth-gl aria-hidden className="pointer-events-none absolute inset-0 size-full opacity-0 [filter:drop-shadow(0_18px_22px_rgba(0,0,0,0.45))] motion-reduce:hidden" />
 
       {/* vignette */}
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_62%_58%,transparent_32%,rgba(0,0,0,0.88)_100%)]" />

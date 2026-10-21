@@ -48,7 +48,8 @@ the three flagship turntable entries, routes and riding gear.
   is sharp on most screens; use a larger one for big retina displays. Next caches optimised images, so a replaced file can take a while to show.
 - **The hero cloth is generated.** `public/images/bikes/r15m-cover.<hash>.webp` is built from the photo's own top contour (tent-like over screen, mirrors and tank, hanging in pleats to the floor) by
   `scripts/make-cover.py` (numpy, scipy, Pillow). If you change the R15M photo, rerun it: it writes a content-hashed file name (so caches cannot serve an old cover) and updates `BIKE_PHOTOS.r15.cover` in `src/lib/data.ts` itself.
-  The peel edge, lip and shadow are drawn live in `hero.tsx`.
+  In motion the cloth is a WebGL mesh (`src/lib/cloth-gl.ts`): it curls off the front wheel, turns over, flutters and
+  flies off up-left, re-lit every frame. Without WebGL it falls back to a clip-path peel; with reduced motion there is no cloth.
 - **Booking has no backend.** Submitting the test-ride form opens a pre-filled WhatsApp message to the chosen showroom; the
   slot is only confirmed when the showroom replies. Nothing is stored. Wire up an API route here if you want real bookings.
 - **Reduced motion.** With `prefers-reduced-motion`, there is no pinning, no smooth-scroll takeover and no scrubbed animation:
