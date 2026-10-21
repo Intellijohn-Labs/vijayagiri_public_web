@@ -5,7 +5,6 @@ import { createContext, useContext, useMemo, useState, type ReactNode } from "re
 export interface BookingPreset {
   nonce: number;
   modelId?: string;
-  branchId?: string;
   note?: string;
 }
 interface BookingApi {

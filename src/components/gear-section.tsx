@@ -50,7 +50,7 @@ export function GearSection() {
                 <Icon className="relative mx-auto my-6 size-28 text-race-soft transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-110 group-hover:text-white" />
                 <h3 className="font-display relative text-3xl font-extrabold uppercase italic leading-none text-white">{g.name}</h3>
                 <p className="relative mt-2 min-h-[2.75rem] text-sm leading-relaxed text-slate-400">{g.blurb}</p>
-                <a href={waLink(SITE.botWhatsapp, `Hi Vijayagiri Yamaha, I'd like to know about the ${g.name}: availability and sizes.`)} target="_blank" rel="noopener noreferrer" className="relative mt-5 inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-white/5 px-3.5 py-2 text-xs font-semibold text-emerald-400 transition-all hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-300 active:scale-95">
+                <a href={waLink(SITE.botWhatsapp, `Hi Vijayagiri Yamaha, I'd like to know about the ${g.name}: availability and sizes.`)} target="_blank" rel="noopener noreferrer" className="relative mt-5 inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-white/5 px-3.5 py-2 text-xs font-semibold text-emerald-400 transition-all hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-300 active:scale-95">
                   <MessageCircle className="size-3.5" /> Ask about it
                 </a>
               </motion.article>

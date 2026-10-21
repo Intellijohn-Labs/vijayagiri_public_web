@@ -80,7 +80,7 @@ export function Turntable({ kind, body, accent, glow, photo }: TurntableProps) {
   const aspect = photo ? photo.width / photo.height : 640 / 360;
 
   return (
-    <div className="relative mx-auto w-full max-w-[560px] lg:max-w-[780px] 2xl:max-w-[900px]" style={{ ["--glow" as string]: glow, ...(photo ? { maxWidth: `min(${Math.round(aspect * 520)}px, ${Math.round(aspect * 62)}svh)` } : null) }}>
+    <div className="relative mx-auto w-full max-w-[min(560px,calc(var(--ar)*24svh))] min-[390px]:max-w-[min(560px,calc(var(--ar)*28svh))] min-[420px]:max-w-[min(560px,calc(var(--ar)*34svh))] [@media(max-height:699px)]:max-w-[min(560px,calc(var(--ar)*12svh))] lg:max-w-[min(780px,calc(var(--ar)*62svh))] 2xl:max-w-[min(900px,calc(var(--ar)*62svh))]" style={{ ["--glow" as string]: glow, ["--ar" as string]: aspect }}>
       {/* platform: glowing base and rings lying flat */}
       <div aria-hidden className="pointer-events-none absolute inset-x-[2%] -bottom-[4%] h-[34%] [perspective:900px]">
         <div className="absolute inset-0 [transform:rotateX(72deg)]">

@@ -241,7 +241,7 @@ export function Hero() {
       </div>
 
       {/* WebGL cloth: the whole hero, because the sheet flies well clear of the bike. Hidden until the cloth moves. */}
-      <canvas data-cloth-gl aria-hidden className="pointer-events-none absolute inset-0 size-full opacity-0 [filter:drop-shadow(0_18px_22px_rgba(0,0,0,0.45))] motion-reduce:hidden" />
+      <canvas data-cloth-gl aria-hidden className="pointer-events-none absolute inset-0 size-full opacity-0 sm:[filter:drop-shadow(0_18px_22px_rgba(0,0,0,0.45))] motion-reduce:hidden" />
 
       {/* vignette */}
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_62%_58%,transparent_32%,rgba(0,0,0,0.88)_100%)]" />

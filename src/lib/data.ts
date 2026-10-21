@@ -19,6 +19,8 @@ export const SITE = {
   /** Left blank until confirmed; the footer line is hidden while empty. */
   supportEmail: "",
   workingDays: "",
+  /** Test-ride slots are offered hourly between these times (24-hour "HH:MM"), in the time zone below. */
+  testRideHours: { open: "09:00", close: "19:00" },
   /** Open / closed badges are computed in this time zone, not the visitor's. */
   timeZone: "Asia/Kolkata",
 } as const;

@@ -72,6 +72,13 @@ html.lenis body {
   backdrop-filter: blur(18px);
 }
 
+@media (max-width: 639px) {
+  .glass {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
 /* turntable rings spin in the platform's plane */
 @keyframes ring-spin {
   to {

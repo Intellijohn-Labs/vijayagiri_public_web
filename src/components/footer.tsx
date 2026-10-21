@@ -17,10 +17,10 @@ export function Footer() {
         </div>
         <div>
           <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Quick links</h3>
-          <ul className="mt-4 space-y-2 text-sm text-slate-400">
+          <ul className="mt-3 text-sm text-slate-400 sm:mt-4 sm:space-y-2">
             {[["#showcase", "Models"], ["#range", "The range"], ["#routes", "Routes"], ["#gear", "Riding gear"], ["#book", "Book a test ride"], ["#showrooms", "Showrooms"], ["#top", "Back to top"]].map(([href, label]) => (
               <li key={href}>
-                <a href={href} className="transition-colors hover:text-white">
+                <a href={href} className="block py-3 transition-colors hover:text-white sm:inline-block sm:py-0">
                   {label}
                 </a>
               </li>
@@ -29,10 +29,10 @@ export function Footer() {
         </div>
         <div>
           <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-white">Contact</h3>
-          <ul className="mt-4 space-y-2 text-sm text-slate-400">
-            <li>
+          <ul className="mt-3 text-sm text-slate-400 sm:mt-4 sm:space-y-2">
+            <li className="py-2 sm:py-0">
               Support:{" "}
-              <a href={`tel:+${SITE.hotline}`} className="text-white hover:underline">
+              <a href={`tel:+${SITE.hotline}`} className="inline-block py-3.5 text-white hover:underline sm:py-0">
                 {SITE.hotlineDisplay}
               </a>
             </li>
@@ -54,7 +54,7 @@ export function Footer() {
           © {year ?? ""} {SITE.legalName} All rights reserved.
         </p>
         <p>Yamaha and its logos are trademarks of Yamaha Motor Co., Ltd. Vijayagiri Auto Agencies is an authorized dealer. Imagery is illustrative: actual models, colours and specifications may vary.</p>
-        <a href={SITE.loginUrl} className="w-fit text-slate-600 transition-colors hover:text-slate-300">
+        <a href={SITE.loginUrl} className="inline-flex min-h-11 w-fit items-center text-slate-600 transition-colors hover:text-slate-300 sm:min-h-0">
           Staff Login
         </a>
       </div>

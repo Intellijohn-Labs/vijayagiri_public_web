@@ -46,7 +46,7 @@ export function Showrooms() {
                     <dt className="mb-1 text-[10px] font-bold uppercase tracking-widest text-slate-500">Address</dt>
                     <dd className="text-xs leading-relaxed text-slate-300">
                       {b.address}{" "}
-                      <a href={mapsLink(b)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 font-medium text-blue-400 hover:underline">
+                      <a href={mapsLink(b)} target="_blank" rel="noopener noreferrer" className="relative inline-flex items-center gap-0.5 font-medium text-blue-400 after:absolute after:-inset-x-1 after:-inset-y-3 after:content-[''] hover:underline">
                         Directions <ArrowUpRight className="size-3" />
                       </a>
                     </dd>
@@ -67,10 +67,10 @@ export function Showrooms() {
                   </div>
                 </dl>
                 <div className="mt-auto grid grid-cols-2 gap-2 pt-2">
-                  <a href={`tel:+${dialOf(b)}`} className="flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-slate-700 bg-slate-800 px-3 py-2.5 text-xs font-semibold tracking-wide text-slate-100 transition-all hover:bg-slate-700 active:scale-95">
+                  <a href={`tel:+${dialOf(b)}`} className="flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-slate-700 bg-slate-800 px-3 py-2.5 text-xs font-semibold tracking-wide text-slate-100 transition-all hover:bg-slate-700 active:scale-95">
                     <Phone className="size-4" /> Call Showroom
                   </a>
-                  <a href={waLink(waOf(b), `Hi ${b.name}, I'd like some information.`)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-emerald-800/60 bg-emerald-950/40 px-3 py-2.5 text-xs font-semibold tracking-wide text-emerald-300 transition-all hover:bg-emerald-900/60 active:scale-95">
+                  <a href={waLink(waOf(b), `Hi ${b.name}, I'd like some information.`)} target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-emerald-800/60 bg-emerald-950/40 px-3 py-2.5 text-xs font-semibold tracking-wide text-emerald-300 transition-all hover:bg-emerald-900/60 active:scale-95">
                     <MessageCircle className="size-4" /> WhatsApp Us
                   </a>
                 </div>

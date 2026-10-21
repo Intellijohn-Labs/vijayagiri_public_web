@@ -31,7 +31,7 @@ export function GearHud() {
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed right-2 top-[4.75rem] z-40 flex flex-col items-end gap-2 sm:right-5 lg:top-1/2 lg:-translate-y-1/2">
-      <div className="relative size-[76px] sm:size-[112px] lg:size-[148px]">
+      <div className="relative size-[64px] min-[380px]:size-[76px] sm:size-[112px] lg:size-[148px]">
         <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="size-full drop-shadow-[0_0_18px_rgba(47,107,255,0.35)]">
           <circle cx={C} cy={C} r={C - 2} fill="rgba(4,6,12,0.72)" stroke="rgba(255,255,255,0.08)" />
           <circle cx={C} cy={C} r={R_PROGRESS} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="2" />

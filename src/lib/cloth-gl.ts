@@ -204,7 +204,7 @@ export function createClothGL({ canvas, anchor, src, width, height }: Options): 
   const draw = () => {
     raf = 0;
     if (destroyed || !texReady) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 640 ? 1.5 : 2); // fewer pixels to shade on phones
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
     if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) {
       canvas.width = Math.round(cw * dpr);

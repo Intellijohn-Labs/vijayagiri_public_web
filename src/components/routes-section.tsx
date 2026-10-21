@@ -79,7 +79,7 @@ export function RoutesSection() {
                 <button
                   type="button"
                   onClick={() => {
-                    prefill({ modelId: r.bestWith, branchId: r.nearestBranch, note: `Planning to ride the ${r.name}` });
+                    prefill({ modelId: r.bestWith, note: `Planning to ride the ${r.name}` });
                     scrollTo("#book");
                   }}
                   className="group/btn mt-6 inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-all hover:border-race/60 hover:bg-race/20 active:scale-95"

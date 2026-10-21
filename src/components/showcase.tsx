@@ -105,7 +105,7 @@ export function Showcase() {
           </AnimatePresence>
         </div>
 
-        <Container className="relative z-10 flex h-full flex-col gap-3 pb-5 pt-20 sm:pt-24 lg:grid lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center lg:gap-10 lg:pb-8">
+        <Container className="relative z-10 flex h-full flex-col gap-2 pb-4 pt-[4.5rem] sm:gap-3 sm:pb-5 sm:pt-24 lg:grid lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center lg:gap-10 lg:pb-8">
           {/* copy + specs */}
           <div className="order-2 flex min-h-0 flex-col lg:order-1">
             <p className="font-display text-sm font-semibold uppercase tracking-[0.32em] text-race-soft">The Flagships</p>
@@ -141,7 +141,7 @@ export function Showcase() {
                       aria-label={c}
                       aria-pressed={ci === Math.min(colourIdx[index], colours.length - 1)}
                       onClick={() => setColourIdx((prev) => prev.map((v, i) => (i === index ? ci : v)))}
-                      className={`size-7 rounded-full border-2 transition-transform enabled:hover:scale-110 enabled:active:scale-90 ${ci === Math.min(colourIdx[index], colours.length - 1) ? "border-white shadow-[0_0_0_3px_rgba(47,107,255,0.6)]" : "border-white/25"}`}
+                      className={`relative size-7 rounded-full border-2 transition-transform before:absolute before:-inset-2.5 before:content-[''] enabled:hover:scale-110 enabled:active:scale-90 ${ci === Math.min(colourIdx[index], colours.length - 1) ? "border-white shadow-[0_0_0_3px_rgba(47,107,255,0.6)]" : "border-white/25"}`}
                       style={{ background: COLOUR_HEX[c] }}
                     />
                   ))}
@@ -150,7 +150,7 @@ export function Showcase() {
               </motion.div>
             </AnimatePresence>
 
-            <div className="mt-4 flex flex-wrap gap-3">
+            <div className="mt-4 flex flex-wrap gap-3 max-sm:pr-[4.75rem]">
               <button
                 type="button"
                 onClick={() => {
@@ -173,7 +173,7 @@ export function Showcase() {
           </div>
 
           {/* stage */}
-          <div className="relative order-1 flex min-h-0 flex-1 flex-col items-center justify-center lg:order-2 lg:flex-none">
+          <div className="relative order-1 flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden lg:order-2 lg:flex-none lg:overflow-visible">
             <div className="relative w-full">
               <Mist trigger={index} />
               <AnimatePresence mode="wait">
@@ -182,11 +182,11 @@ export function Showcase() {
                 </motion.div>
               </AnimatePresence>
             </div>
-            <p className="mt-2 text-center text-[11px] uppercase tracking-[0.25em] text-slate-500">{f.photo ? "Drag to tilt" : "Drag to turn · illustration"}</p>
+            <p className="mt-1 hidden text-center text-[11px] uppercase tracking-[0.25em] text-slate-500 min-[420px]:block sm:mt-2">{f.photo ? "Drag to tilt" : "Drag to turn · illustration"}</p>
 
-            <div role="tablist" aria-label="Choose a model" className="mt-3 flex items-center gap-1 rounded-full border border-white/10 bg-black/30 p-1 backdrop-blur">
+            <div role="tablist" aria-label="Choose a model" className="mt-2 flex shrink-0 items-center gap-1 rounded-full border border-white/10 bg-black/30 p-1 backdrop-blur">
               {FLAGSHIPS.map((x, i) => (
-                <button key={x.modelId} role="tab" type="button" aria-selected={i === index} onClick={() => select(i)} className="relative rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-300 transition-colors hover:text-white aria-selected:text-white sm:px-5">
+                <button key={x.modelId} role="tab" type="button" aria-selected={i === index} onClick={() => select(i)} className="relative min-h-11 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-300 transition-colors hover:text-white aria-selected:text-white sm:px-5">
                   {i === index && <motion.span layoutId="tab-pill" className="absolute inset-0 rounded-full bg-race/90 shadow-lg shadow-blue-600/40" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
                   <span className="relative">{x.label.replace("Yamaha ", "")}</span>
                 </button>

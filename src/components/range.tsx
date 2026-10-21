@@ -32,7 +32,7 @@ export function Range() {
 
         <div role="tablist" aria-label="Rank by" className="mt-10 inline-flex rounded-full border border-white/10 bg-white/[0.04] p-1">
           {METRICS.map((m) => (
-            <button key={m.key} role="tab" type="button" aria-selected={metricKey === m.key} onClick={() => setMetricKey(m.key)} className="relative rounded-full px-5 py-2 text-sm font-semibold text-slate-300 transition-colors hover:text-white aria-selected:text-white">
+            <button key={m.key} role="tab" type="button" aria-selected={metricKey === m.key} onClick={() => setMetricKey(m.key)} className="relative min-h-11 rounded-full px-5 py-2 text-sm font-semibold text-slate-300 transition-colors hover:text-white aria-selected:text-white">
               {metricKey === m.key && <motion.span layoutId="metric-pill" className="absolute inset-0 rounded-full bg-race/90" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
               <span className="relative">{m.label}</span>
             </button>
@@ -63,7 +63,7 @@ export function Range() {
                   <span className="ml-1 text-sm font-semibold not-italic text-race-soft">{metric.unit}</span>
                 </p>
                 <div className="flex items-center justify-end gap-3">
-                  <a href={waLink(SITE.botWhatsapp, `Hi Vijayagiri Yamaha, I'd like to know more about the ${m.name}.`)} target="_blank" rel="noopener noreferrer" aria-label={`Enquire about the ${m.name} on WhatsApp`} className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-white/5 px-3 py-2 text-xs font-semibold text-emerald-400 transition-all hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-300 active:scale-95">
+                  <a href={waLink(SITE.botWhatsapp, `Hi Vijayagiri Yamaha, I'd like to know more about the ${m.name}.`)} target="_blank" rel="noopener noreferrer" aria-label={`Enquire about the ${m.name} on WhatsApp`} className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-white/5 px-3.5 py-2 text-xs font-semibold text-emerald-400 transition-all hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-300 active:scale-95">
                     <MessageCircle className="size-3.5" /> Enquire
                   </a>
                 </div>

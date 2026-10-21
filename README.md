@@ -22,7 +22,7 @@ The page is told as a gear change. A fixed dial on the right shifts as you scrol
 | 3 | Pure Acceleration | Whole range ranked by power, torque or mileage (`range.tsx`) |
 | 4 | Open Roads | Kerala riding routes (`routes-section.tsx`) |
 | 5 | Racing DNA | Riding gear (`gear-section.tsx`) |
-| 6 | The Summit | Test-ride booking, showrooms, footer (`booking.tsx`, `showrooms.tsx`) |
+| 6 | The Summit | Test-ride request (3 steps: model, date and time, your details), showrooms, footer (`booking.tsx`, `showrooms.tsx`) |
 
 Smooth scrolling is Lenis, driven by GSAP's ticker so ScrollTrigger stays in sync (`smooth-scroll.tsx`).
 Gear changes come from `useGearSection` (`gear-context.tsx`).
@@ -50,8 +50,8 @@ the three flagship turntable entries, routes and riding gear.
   `scripts/make-cover.py` (numpy, scipy, Pillow). If you change the R15M photo, rerun it: it writes a content-hashed file name (so caches cannot serve an old cover) and updates `BIKE_PHOTOS.r15.cover` in `src/lib/data.ts` itself.
   In motion the cloth is a WebGL mesh (`src/lib/cloth-gl.ts`): it curls off the front wheel, turns over, flutters and
   flies off up-left, re-lit every frame. Without WebGL it falls back to a clip-path peel; with reduced motion there is no cloth.
-- **Booking has no backend.** Submitting the test-ride form opens a pre-filled WhatsApp message to the chosen showroom; the
-  slot is only confirmed when the showroom replies. Nothing is stored. Wire up an API route here if you want real bookings.
+- **Booking has no backend.** Submitting the test-ride form opens a pre-filled WhatsApp message to the central line (`SITE.hotline`); it names no showroom, and slots use `SITE.testRideHours`; the
+  slot is only confirmed when the team replies. Nothing is stored. Wire up an API route here if you want real bookings.
 - **Reduced motion.** With `prefers-reduced-motion`, there is no pinning, no smooth-scroll takeover and no scrubbed animation:
   visitors see the finished scene and the model tabs switch directly.
 - **Cache Components is on** (see `next.config.ts`). Anything time- or random-dependent lives in effects or handlers, never in render.

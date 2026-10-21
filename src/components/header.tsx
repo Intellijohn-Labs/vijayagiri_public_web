@@ -33,7 +33,7 @@ export function Header() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${scrolled || open ? "border-white/10 bg-ink/80 backdrop-blur-md" : "border-transparent bg-transparent"}`}>
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-5 sm:h-20 sm:px-8">
-        <a href="#top" className="flex shrink-0 items-center gap-3" aria-label="Vijayagiri Auto Agencies – home">
+        <a href="#top" className="flex min-h-11 shrink-0 items-center gap-3" aria-label="Vijayagiri Auto Agencies – home">
           <Image src="/images/vijayagiri-logo.png" alt="" width={1199} height={460} priority className="h-8 w-auto brightness-0 invert sm:h-10" />
           <span className="hidden leading-tight sm:block">
             <span className="block text-base font-semibold tracking-tight text-white">{SITE.brand}</span>
@@ -51,12 +51,12 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-2 sm:gap-3 lg:ml-0">
           <a href={`tel:+${SITE.hotline}`} aria-label="Call customer support" className="flex items-center gap-2 rounded-full border border-white/10 p-1 transition-colors hover:border-race/60 hover:bg-white/5 sm:pr-4">
-            <span className="grid size-8 place-items-center rounded-full bg-race/20 text-race-soft">
+            <span className="grid size-9 place-items-center rounded-full bg-race/20 text-race-soft">
               <Phone className="size-4" />
             </span>
             <span className="hidden font-mono text-sm font-semibold tracking-tight text-white sm:inline">{SITE.hotlineDisplay}</span>
           </a>
-          <a href="#book" className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2.5 text-xs font-semibold tracking-wide text-white shadow-md shadow-blue-600/25 transition-all duration-200 hover:from-blue-500 hover:to-blue-600 hover:shadow-lg hover:shadow-blue-500/30 active:scale-95 sm:px-5 sm:text-sm">
+          <a href="#book" className="group inline-flex min-h-11 items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2.5 text-xs font-semibold tracking-wide text-white shadow-md shadow-blue-600/25 transition-all duration-200 hover:from-blue-500 hover:to-blue-600 hover:shadow-lg hover:shadow-blue-500/30 active:scale-95 sm:px-5 sm:text-sm">
             <span>
               <span className="hidden sm:inline">Book </span>Test Ride
             </span>
@@ -65,7 +65,7 @@ export function Header() {
           <a href={SITE.loginUrl} aria-label="Staff Login" title="Staff Login" className="hidden size-9 place-items-center rounded-full text-slate-500 transition-colors hover:bg-white/5 hover:text-race-soft lg:grid">
             <Lock className="size-[18px]" />
           </a>
-          <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"} className="grid size-10 place-items-center rounded-full text-white lg:hidden">
+          <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"} className="grid size-11 place-items-center rounded-full text-white lg:hidden">
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
